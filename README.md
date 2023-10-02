@@ -64,8 +64,8 @@
 | 1 | [action] 我拿取了一字螺钉 | [code] 将一字螺丝刀移动到交换空间
 | 2 | [action] 伸出右手拿东西 | [code] 松开夹具
 | 3 | [action] stand | [code] No action
-| 4 | [lanuage] 将信号转接板移动到待安装的位置 | follow human's instruction
-| 5 | [action] 装配信号转接板 | No action
-| 6 | [action] 我拿去了一字螺钉 | No action, 因为一字螺丝刀已经在手中
-| 7 | [action] 装配信号转接板 | No action
-| 8 | [action] stand | No action
+| 4 | [lanuage] 将信号转接板移动到待安装的位置 | [code] follow human's instruction
+| 5 | [action] 装配信号转接板 | [code] No action
+| 6 | [action] 我拿去了一字螺钉 | [code] No action, 因为一字螺丝刀已经在手中
+| 7 | [action] 装配信号转接板 | [code] No action
+| 8 | [action] stand | [code] No action
