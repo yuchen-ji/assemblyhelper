@@ -1,6 +1,6 @@
-# Foundation model for human-robot collaboration assembly
+# Foundation Model for Human-Robot Collaboration Assembly
 
-## 实验环境
+## **实验环境**
 - FR3协作机器人
 - 人类协作者
 - 卫星组件(框架x1, 电池x1, 桁条x4, 信息转接板x1)
@@ -8,20 +8,21 @@
 - 工具(十字螺丝刀, 一字螺丝刀, 内六角螺丝刀)
 - 工作空间(装配空间, 零件空间, 工具空间, 交换空间)
 
-## 装配流程 (human & robot)
-**安装桁条1**
-| idx | Human | Robot |
+
+## **装配流程 (human & robot)**
+**一、安装桁条1**
+| step | Human | Robot |
 | :---- | :---- | :---- |
 | 1 | [action] 我拿起了内六角螺钉 | [code] 将内六角螺丝刀移动到交换空间
 | 2 | [action] 我伸右手去接取物品 | [code] 松开夹爪
-| 3 | [language] 请移动到装配空间 | [code] follow human's instruction
+| 3 | [language] 将夹爪移动到装配空间 | [code] follow human's instruction
 | 4 | [action&language] 将桁条移动到我手指的位置 | [img&code] 将桁条移动到左上角的安装位置
-| 4 | (alternative)[language] 请将桁条移动到左上角 | [code] follow human's instruction
+| 4 | (alternative)[language] 将桁条移动到左上角 | [code] follow human's instruction
 | 5 | [action] 装配桁条 | [code] No action
 | 6 | [action] stand | [code] No action
 
-**安装桁条2**
-| idx | Human | Robot |
+**二、安装桁条2**
+| step | Human | Robot |
 | :---- | :---- | :---- |
 | 1 | [language] 将桁条递给我 | [code] follow human's instruction
 | 2 | [action] 伸右手去拿物体 | [code] 松开夹爪
@@ -29,8 +30,8 @@
 | 4 | [language] 装配桁条 | [code] No action
 | 5 | [language] stand | [code] No action
 
-**安装电池左侧**
-| idx | Human | Robot |
+**三、安装电池左侧**
+| step | Human | Robot |
 | :---- | :---- | :---- |
 | 1 | [language] 将电池移动到装配的位置 | [code] follow human's instruction
 | 2 | [action] 拿起内六角螺钉 | [code] No action, 因为内六角螺丝刀在手中
@@ -38,28 +39,28 @@
 | 4 | ....
 | 5 | [action] stand | [code] No action
 
-**安装桁条3**
-| idx | Human | Robot |
+**四、安装桁条3**
+| step | Human | Robot |
 | :---- | :---- | :---- |
-| 1 | [language] 移动到装配空间 | [code] follow human's instruction
-| 2 | [action&language] 请桁条移动到我手指的位置 | [img&code] 将桁条移动到右上角的装配处
-| 2 | (alternative)[language] 请将桁条移动到右上角 | [code] follow human's instruction
+| 1 | [language] 将夹爪移动到装配空间 | [code] follow human's instruction
+| 2 | [action&language] 将桁条移动到我手指的位置 | [img&code] 将桁条移动到右上角的装配处
+| 2 | (alternative)[language] 将桁条移动到右上角 | [code] follow human's instruction
 | 3 | [action] 我拿起了内六角螺钉 | [code] No action, 因为内六角螺丝刀已经在人手中
 | 4 | [action] 装配桁条 | [code] No action
 | 5 | [action] stand | [code] No action
 
-**安装桁条4**
-| idx | Human | Robot |
+**五、安装桁条4**
+| step | Human | Robot |
 | :---- | :---- | :---- |
-| 1 | [language] 移动到装配空间 | [code] follow human's instruction
-| 2 | [action&language] 请桁条移动到我手指的位置 | [img&code] 将桁条移动到右下角的装配处
-| 2 | (alternative)[language] 请将桁条移动到右下角 | [code] follow human's instruction
+| 1 | [language] 将夹爪移动到装配空间 | [code] follow human's instruction
+| 2 | [action&language] 桁条移动到我手指的位置 | [img&code] 将桁条移动到右下角的装配处
+| 2 | (alternative)[language] 将桁条移动到右下角 | [code] follow human's instruction
 | 3 | [action] 我拿起了内六角螺钉 | [code] No action, 因为内六角螺丝刀已经在人手中
 | 4 | [action] 装配桁条 | [code] No action
 | 5 | [action] stand | [code] No action
 
-**安装信号转接板**
-| idx | Human | Robot |
+**六、安装信号转接板**
+| step | Human | Robot |
 | :---- | :---- | :---- |
 | 1 | [action] 我拿取了一字螺钉 | [code] 将一字螺丝刀移动到交换空间
 | 2 | [action] 伸出右手拿东西 | [code] 松开夹具
@@ -69,3 +70,11 @@
 | 6 | [action] 我拿去了一字螺钉 | [code] No action, 因为一字螺丝刀已经在手中
 | 7 | [action] 装配信号转接板 | [code] No action
 | 8 | [action] stand | [code] No action
+
+
+## **Related human action**
+1. stand （still）
+2. pick up fastener （extend left hand， dynamic）
+3. receive tools or parts （extend right hand，still）
+4. assembly （extend both hands， still）
+5. other adversarial action
