@@ -19,8 +19,11 @@ open_gripper(): Open the robot’s gripper. Returns nothing.
 close_gripper(): Close the robot’s gripper. Returns nothing.
 set_speed(rate): Set the robot's speed to rate%. Returns nothing.
 move_to_position(pose): Move the gripper to the 6D pose. Returns nothing.
-get_obj_position(obj_name): Input the name of objects. Return the current 6D pose of it in the assembly_space.
-get_storage_position(obj_name): Input the name of tools or parts. Returns the 6D pose for their storage positions.
+# add 10.03，用于获取场景感知
+get_scene_observation(): Returns the detected objects and their pixel coordinates from the current camera perspective.
+# add 10.03，用于区分固定位置的parts和位置不固定的tools
+get_tool_position(obj_name): Input the name of tools. Returns the 6D pose for their positions.
+get_part_position(obj_name): Input the name of parts. Returns the 6D pose for their storage positions.
 get_assemble_positon(part_name): Input the name of the part. Returns its correct assembly 6D pose.
 get_current_position(): Returns the 6D pose for the position of the gripper.
 
