@@ -78,3 +78,16 @@
 3. receive tools or parts （extend right hand，still）
 4. assembly （extend both hands， still）
 5. other adversarial action
+
+## **Memory bank**
+| step | location | status | object |
+| :---- | :---- | :---- | :---- |
+| 1 | deliver_space | closed | None |
+| n | when use `move_to_location()` | when use `open()` or `close()` | when use `open()` set object = None, when using `close()` set object = detect |
+
+
+**NOT NECESSARY**
+| step | part_space | tool_space | assembly_space |
+| :---- | :---- | :---- | :---- |
+| 1 | all parts | all tools | framework |
+| n | ... | ... | ... | ... |
