@@ -80,13 +80,14 @@
 5. other adversarial action
 
 ## **Memory bank**
+**Robot state**
 | step | location | status | object |
 | :---- | :---- | :---- | :---- |
 | 1 | deliver_space | closed | None |
 | n | when use `move_to_location()` | when use `open()` or `close()` | when use `open()` set object = None, when using `close()` set object = pick_obj |
 
 
-**NOT NECESSARY**
+**Scene state (NOT NECESSARY)**
 | step | part_space | tool_space | assembly_space |
 | :---- | :---- | :---- | :---- |
 | 1 | all parts | all tools | framework |

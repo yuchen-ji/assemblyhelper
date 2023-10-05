@@ -54,4 +54,7 @@ def get_part_storage_location(obj_name):
 def get_pointed_assembly_location():
     """
     """
+    img_path = ""
+    
+    
     pass
