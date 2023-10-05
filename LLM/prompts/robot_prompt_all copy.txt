@@ -51,4 +51,30 @@ close_gripper();
 move_to_position(deliver_space);
 </code>
 
+Human[action&language]: Please install the stringer to the position where my finger is pointing.
+The information of objects in the scene are as follows:
+assembly_position_1: [pixel_position: [21, 21], 6D pose: [10, 10, 10, 10, 10, 10]]
+assembly_position_2: [pixel_position: [21, 20], 6D pose: [20, 10, 10, 10, 10, 10]]
+finger_position: [pixel_position: [21, 21]]
+
+Robot: <thought> I need to grab the stringer in part_space, then select the pixel coordinates and the assembly position closest to my finger and move to that assembly position. </thought>
+<code>
+# move to the part_space to prepare for grasping object
+move_to_position(part_space)
+# get the storage position of stringer
+target_position=get_part_storage_position("stringer")
+# open gripper and prepare to grasp
+open_gripper()
+# move to the position of stringer
+move_to_position(target_position)
+# close gripper and finish grasping
+close_gripper()
+# move to assembly position to prepare for assembly
+move_to_position(assembly_space)
+# choose the 6D pose which its pixel coordinates closest to your finger's
+assembly_position = [10, 10, 10, 10, 10, 10]
+# move to the assembly position
+move_to_position(assembly_position)
+</code>
+
 Before you output each line of code, you need to output its textual explanation, Are you ready? 

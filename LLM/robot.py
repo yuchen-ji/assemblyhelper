@@ -1,8 +1,8 @@
 import os
 import openai
 
-os.environ["http_proxy"] = "http://127.0.0.1:7890"
-os.environ["https_proxy"] = "http://127.0.0.1:7890"
+# os.environ["http_proxy"] = "http://127.0.0.1:7890"
+# os.environ["https_proxy"] = "http://127.0.0.1:7890"
 
 openai.api_key = os.getenv(
     "OPENAI_KEY", default="sk-GM3AyFSCFHwbJdnC4c1a2637E4Bf4433AcFcAc8c3e976cFe"
@@ -11,7 +11,7 @@ openai.api_base = "https://api.ai-yyds.com/v1"
 
 
 # load prompt message
-file_path = "llm_robot\prompts\robot_prompt_all.txt"  # 替换为您的文件路径
+file_path = "LLM/prompts/robot_prompt_all copy.txt"  # 替换为您的文件路径
 with open(file_path, "r", encoding="utf-8") as file:
     prompt = file.read()
 

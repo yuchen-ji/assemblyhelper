@@ -1,4 +1,4 @@
-# Foundation Model for Human-Robot Collaboration Assembly
+# **AssemblyHelper:** Foundation Model for Human-Robot Collaboration Assembly
 
 ## **实验环境**
 - FR3协作机器人
