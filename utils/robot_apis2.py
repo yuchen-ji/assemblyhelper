@@ -9,7 +9,7 @@ from utils.detect import detect
 from typing import Any, Dict, List, Optional, Tuple
 
 #   ----------------------
-#   Gobal variables
+#   Global variables
 #   ----------------------
 
 TOOLS = ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]
@@ -83,8 +83,8 @@ def get_grasp_pose(scene_des, obj_name) -> List:
     grasp_idx = [i for i, v in enumerate(scene_des["classes"]) if v == obj_name][0]
     mask = scene_des["masks"][grasp_idx].astype('uint8') * 255
     
-    if obj_name == "crossscrew":
-        pose = get_crossscrew_grasp(mask)
+    if obj_name == "phillips screwdriver":
+        pose = get_phillipsscrew_grasp(mask)
         
     print(pose)
     return pose
@@ -94,7 +94,6 @@ def get_pointed_assembly_location(scene_des: List) -> List:
     """
     获取手指向的物体装配位姿
     """
-    img_path = ""
     pass
 
 
@@ -103,26 +102,14 @@ def get_pointed_assembly_location(scene_des: List) -> List:
 #   Task dependence APIs
 #   --------------------
 
-def get_crossscrew_grasp(bin_image):
+def get_phillipsscrew_grasp(bin_image) -> List:
     """
     获取crossscrew的抓取姿态
     以crossscrew垂直于图像时与Y轴的角度为0, 向左偏为负
     """
-    contours, _ = cv2.findContours(bin_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-    max_area = 0
-    main_bbox = None
-
-    for contour in contours:
-        rect = cv2.minAreaRect(contour)
-        center, size, angle = rect
-        area = size[0] * size[1]
-        if area > max_area:
-            max_area = area
-            main_bbox = rect
-    # print("Bounding box: ", main_bbox)
+    rot_bbox = get_rot_bbox(bin_image)
+    (cx, cy), (w, h), r = rot_bbox
     
-    (cx, cy), (w, h), r = main_bbox
     if w < h:
         r_rad = r * (math.pi / 180)
         x = cx - np.sin(r_rad) * h * 0.3
@@ -135,9 +122,50 @@ def get_crossscrew_grasp(bin_image):
     x = x.astype(int)
     y = y.astype(int)
     
-    return (x, y, r_rad)    
+    return [x, y, r_rad]
+
+
+def get_slottedscrewdriver_grasp(bin_image) -> List:
+    """
+    获取一字螺丝刀的抓取姿态
+    """
+    return get_phillipsscrew_grasp(bin_image)
+
+
+def get_hexscrewdriver_grasp(bin_image) -> List:
+    """
+    获取六角螺丝刀的抓取姿态
+    """
+    return get_phillipsscrew_grasp(bin_image)
     
+
+def get_stringer_grasp(bin_image) -> List:
+    """
+    获取桁条的抓取姿态
+    """
+    rot_bbox = get_rot_bbox(bin_image)
+    (cx, cy), (w, h), r = rot_bbox
     
+    x = cx.astype(int)
+    y = cy.astype(int)
+    r_rad = 90 * (math.pi / 180)
+    
+    return [x, y, r_rad]
+
+
+def get_battery_grasp(bin_image) -> List:
+    """
+    获取电池的抓取姿态
+    """
+    return get_stringer_grasp(bin_image)
+
+
+def get_signalinterfaceboard_grasp(bin_image) -> List:
+    """
+    获取信号转接板的抓取姿态
+    """
+    return get_stringer_grasp(bin_image)
+
 
 #   ---------------------------------------------
 #   Task independence APIs, but not expose to LLM
@@ -157,11 +185,28 @@ def cam2world(obj_pos: List) -> List:
     pass
 
 
+def get_rot_bbox(bin_image) -> List:
+    """
+    获取分割图像中，最小的旋转边界框
+    """
+    contours, _ = cv2.findContours(bin_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    max_area = 0
+    rot_bbox = None
+    for contour in contours:
+        rect = cv2.minAreaRect(contour)
+        center, size, angle = rect
+        area = size[0] * size[1]
+        if area > max_area:
+            max_area = area
+            rot_bbox = rect
+    # print("Bounding box: ", rot_bbox)
+    return rot_bbox
 
 
 
 if __name__ == '__main__':
-    obj_name = ""
+    obj_name = "phillips screwdriver"
     image_path = ""
     scene_des = get_scene_descriptions(image_path)
     target_pose = get_grasp_pose(scene_des, obj_name)

@@ -11,14 +11,14 @@ openai.api_base = "https://api.ai-yyds.com/v1"
 
 
 # load prompt message
-file_path = "LLM/prompts/robot_prompt_all copy.txt"  # 替换为您的文件路径
+file_path = "LLM/prompts/robot_prompt_update2.yml"  # 替换为您的文件路径
 with open(file_path, "r", encoding="utf-8") as file:
     prompt = file.read()
 
 messages = [
     {
         "role": "system",
-        "content": "You are a desktop robotic arm with 6 degrees of freedom, and the end effector is a gripper. You need to understand my actions/instructions and assist me in completing the assembly of the components.",
+        "content": "You are a desktop robotic arm with 6 degrees of freedom, and the end effector is a gripper. You need to understand my actions/language and assist me in completing the assembly of the parts.",
     },
     {
         "role": "user",
@@ -49,7 +49,7 @@ while True:
     # 用户输入新的请求
     content = ""
     str = input("User: ")
-    while str != "q":  # 此处可自行设置
+    while str != "q":
         content = content + str + "\n"
         str = input("User: ")
     # print(content)
