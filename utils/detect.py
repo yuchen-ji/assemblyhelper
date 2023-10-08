@@ -5,6 +5,7 @@ import clip
 import torch
 import numpy as np
 import os
+from typing import Any, Dict, List, Optional, Tuple
 
 
 def process_img(image_path):
@@ -172,12 +173,12 @@ def detect(image_path):
             box_center = [x+w/2, y+w/2]
             box_right = [x+w, y+h/2]
             
-            masks_.extend([masks["segmentation"][seg_idx]] * 6)
+            masks_.extend([masks[seg_idx]["segmentation"]] * 6)
             classes_.extend(["top_left", "top_right", "bottom_left", "bottom_right", "center", "right"])
             centers_.extend([top_left, top_right, bottom_left, bottom_right, box_center, box_right])
             bboxes_.extend([cropped_bboxes[seg_idx] * 6])
         else:
-            masks_.append(masks["segmentation"][seg_idx])
+            masks_.append(masks[seg_idx]["segmentation"])
             classes_.append(cls_names[cls_idx])
             centers_.append(cropped_bboxes[seg_idx][:2])
             bboxes_.append(cropped_bboxes[seg_idx])
@@ -192,4 +193,4 @@ def detect(image_path):
 
     
 if __name__ == "__main__":
-    detect("1.jpg")
+    detect("VM/labels/crossscrew/cross_1.png")
