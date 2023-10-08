@@ -1,8 +1,9 @@
 import cv2
 import numpy as np
+import math
 
 # 读取二值分割图像
-image = cv2.imread("VM/labels/crossscrew/cross_2.png")
+image = cv2.imread("下载.png")
 
 # 将图像转化为灰度图
 gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -44,8 +45,24 @@ cv2.drawContours(image, [rotated_box], 0, (0, 255, 0), 2)
 
 # @Rect：4.5之后的版本，以bbox的最低点为原点，将x轴顺时针旋转，碰到的第一个边所旋转的角度
 # @width：4.5之后的版本，以bbox的最低点为原点，将x轴顺时针旋转，碰到的第一个边为width
-print("旋转角度：", main_direction)
-print("最小包围框：", main_bbox)
+# print("旋转角度：", main_direction)
+# print("最小包围框：", main_bbox)
+
+(cx, cy), (w, h), r = main_bbox
+r_ = r if w < h else -(90-r)
+r_rad = r_ * (math.pi / 180)
+
+if w < h:
+    x = cx - np.sin(r_rad) * h * 0.3
+    y = cy + np.cos(r_rad) * h * 0.3
+else:
+    x = cx - np.sin(r_rad) * w * 0.3
+    y = cy + np.cos(r_rad) * w * 0.3
+    
+x = x.astype(int)
+y = y.astype(int)
+cv2.circle(image, (x, y), 10, [0, 0, 255], -1)
+print(r_)
 
 # 显示图像和包围框
 cv2.imwrite("bbox_image.png", image)
