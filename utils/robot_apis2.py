@@ -2,9 +2,10 @@ import os
 import sys
 sys.path.insert(0, "/workspaces/assemblyhelper")
 
-import numpy as np
 import cv2
 import math
+import yaml
+import numpy as np
 from utils.detect import detect
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -12,33 +13,58 @@ from typing import Any, Dict, List, Optional, Tuple
 #   Global variables
 #   ----------------------
 
+TARGET_OBJ = None
 TOOLS = ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]
 PARTS = ["framework", "stringer", "battery", "signal interface board"]
-PICKED_OBJ = None
+ROBOT_SENSOR = ["deliver_space", "closed", "None"]
+ASSEMBLY_LOCATION = None
+WORKSPACE = None
 
 
 #   ----------------------
 #   Task independence APIs
 #   ----------------------
 
-def stop():
+def stop() -> None:
     """
     停止机器人运动
     """
     pass
 
 
-def open_gripper():
+def open_gripper() -> None:
     """
     打开夹爪
-    """
+    """  
+    # Set gripper is open and grasped obj is None
+    ROBOT_SENSOR[1] = "open"
+    ROBOT_SENSOR[2] = "None"
     pass
 
 
-def close_gripper():
+def close_gripper() -> None:
     """
     关闭夹爪
-    """
+    """ 
+    # Set gripper is closed and grasped obj is target obj
+    ROBOT_SENSOR[1] = "closed"
+    ROBOT_SENSOR[2] = TARGET_OBJ
+    
+    # Set some postprocess to avoid collisions
+    if ROBOT_SENSOR[1] == "tool_space":
+        pose = get_corrent_location()
+        pose[2] += 50
+        move_to_location(pose)
+    
+    if ROBOT_SENSOR[2] == "part_space":
+        pose = get_corrent_location()
+        pose[1] += 50
+        move_to_location(pose)
+        
+    if ROBOT_SENSOR[1] == "assembly_space":
+        pose = get_corrent_location()
+        pose[2] += 50
+        move_to_location(pose)
     pass
 
 
@@ -53,8 +79,12 @@ def move_to_location(pose):
     """
     机器人移动到指定位姿
     """
-    # if pose in part space
-    # if pose in tool space
+    if isinstance(pose, list):
+        pass
+    if isinstance(pose, str):
+        pose = ASSEMBLY_LOCATION[pose]
+        pass
+    
     pass
 
 
@@ -77,8 +107,9 @@ def get_grasp_pose(scene_des, obj_name) -> List:
     """
     使用视觉获取机器人夹取零件/工具时的位姿
     """
-    # set gobal variable pick objs
-    PICKED_OBJ = obj_name
+    # Set global variable target obj
+    global TARGET_OBJ
+    TARGET_OBJ = obj_name
     
     grasp_idx = [i for i, v in enumerate(scene_des["classes"]) if v == obj_name][0]
     mask = scene_des["masks"][grasp_idx].astype('uint8') * 255
@@ -86,6 +117,22 @@ def get_grasp_pose(scene_des, obj_name) -> List:
     if obj_name == "phillips screwdriver":
         pose = get_phillipsscrew_grasp(mask)
         
+    if obj_name == "slotted screwdriver":
+        pose = get_slottedscrewdriver_grasp(mask)
+        
+    if obj_name == "hex screwdriver":
+        pose = get_hexscrewdriver_grasp(mask)
+        
+    if obj_name == "stringer":
+        pose = get_stringer_grasp(mask)
+        
+    if obj_name == "battery":
+        pose = get_battery_grasp(mask)
+        
+    if obj_name == "signal interface board":
+        pose = get_signalinterfaceboard_grasp(mask)
+
+
     print(pose)
     return pose
 
@@ -167,21 +214,56 @@ def get_signalinterfaceboard_grasp(bin_image) -> List:
     return get_stringer_grasp(bin_image)
 
 
+
 #   ---------------------------------------------
 #   Task independence APIs, but not expose to LLM
 #   ---------------------------------------------
+
+def get_config() -> None:
+    """
+    读取配置文件
+    """
+    with open("utils/config.yml", 'r') as file:
+        data = yaml.load(file, Loader=yaml.FullLoader)
+        
+    global ASSEMBLY_LOCATION, WORKSPACE
+    ASSEMBLY_LOCATION = data["assembly_location"]
+    WORKSPACE = data["workspace"]
+    
+
+def determine_workspace(pose: list, space: str) -> bool:
+    """
+    根据输入的pose和所在区域的名称, 判断是否在指定的区域
+    """
+    status = False
+    pose_gt = np.array(ASSEMBLY_LOCATION[space])
+    pose = np.array(pose)
+    if np.linalg.norm(pose_gt, pose) < 50:
+        status = True
+    return status
+
 
 def pixel2cam(obj_des: List) -> List:
     """
     将像素坐标转化为相机坐标
     """
+    
     pass
 
 
-def cam2world(obj_pos: List) -> List:
+def cam2end(obj_pos: List) -> List:
     """
-    将相机坐标转化为世界坐标
+    将相机坐标转化为机器人末端执行器坐标
     """
+    
+    pass
+
+
+def end2base(obj_pos: List) -> List:
+    """
+    将末端执行器坐标转化为机器人底座坐标
+    """
+    
     pass
 
 
