@@ -60,17 +60,21 @@ move_to_location(assembly_space)
 scene_des=get_scene_descriptions()
 # Step 3: get the assembly location pointed to by the human's finger
 assembly_location=get_pointed_assembly_location(scene_des)
-# Step 4: get the storage location of the stringer
-part_location=get_storage_location("stringer")
-# Step 5: open the gripper
+# Step 4: move to the part_space to prepare for getting scene description
+move_to_location(part_space)
+# Step 5: get scene description
+scene_des=get_scene_descriptions()
+# Step 6: get the storage location of stringer
+part_location=get_storage_location(scene_des, "stringer"); 
+# Step 7: open the gripper
 open_gripper()
-# Step 6: move to the part_location of the stringer
+# Step 8: move to the part_location of the stringer
 move_to_location(part_location)
-# Step 7: close the gripper to grasp the stringer
+# Step 9: close the gripper to grasp the stringer
 close_gripper()
-# Step 8: move to the assembly_space
+# Step 10: move to the assembly_space
 move_to_location(assembly_space)
-# Step 9: move the stringer to its correct assembly location
+# Step 11: move the stringer to its correct assembly location
 move_to_location(assembly_location)
 
 Before you output each line of code, you need to output its textual explanation, Are you ready? 
