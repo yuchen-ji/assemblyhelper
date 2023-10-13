@@ -1,0 +1,13 @@
+assembly_location:
+  top_left: [x1, y1, z1, rx1, ry1, rz1]
+  top_right: [x2, y2, z2, rx2, ry2, rz2]
+  bottom_left: [x3, y3, z3, rx3, ry3, rz3]
+  bottom_right: [x4, y4, z4, rx4, ry4, rz4]
+  global_right: [x5, y5, z5, rx5, ry5, rz5]
+  global_center: [x6, y6, z6, rx6, ry6, rz6]
+
+workspace:
+  deliver_space: [x1, y1, z1]
+  tool_space: []
+  part_space: []
+  assembly_space: []

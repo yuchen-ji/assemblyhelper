@@ -1,0 +1,20 @@
+The following is what you observed in the scene:
+assembly_A: {{pixel coords: [100, 100]}; {"6D pose": [1, 1, 1, 1, 1, 1]}}
+assembly_B: {{pixel coords: [0, 0]}; {"6D pose": [2, 2, 2, 2, 2, 2]}}
+assembly_C: {{pixel coords: [200, 0]}; {"6D pose": [3, 3, 3, 3, 3, 3]}}
+assembly_D: {{pixel coords: [0, 200]}; {"6D pose": [4, 4, 4, 4, 4, 4]}}
+assembly_E: {{pixel coords: [200, 200]}; {"6D pose": [5, 5, 5, 5, 5, 5]}}
+assembly_F: {{pixel coords: [200, 100]}; {"6D pose": [6, 6, 6, 6, 6, 6]}}
+finger: {{pixel coords: [190, 110]}}
+
+Your should first output the process of thought. 
+But your final outputs need to meet the following format:
+<output> [x, y, z, rx, ry, rz] </output>
+
+What is the 6Dpose of the assembly location I am pointing to?
+
+
+
+<output>
+[x6, y6, z6, rx6, ry6, rz6]
+</output>

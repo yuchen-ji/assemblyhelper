@@ -6,29 +6,38 @@ import openai
 
 
 class CodeGenerator:
-    def __init__(self, file_path) -> None:
-
-        openai.api_key = os.getenv("OPENAI_KEY", default="sk-GM3AyFSCFHwbJdnC4c1a2637E4Bf4433AcFcAc8c3e976cFe")
+    def __init__(
+        self, file_path=None, preprompt=None, model="gpt-3.5-turbo", oncecall=True
+    ):
+        """
+        通过file或者str初始化llm的prompt, file的优先级高
+        """
+        openai.api_key = os.getenv(
+            "OPENAI_KEY", default="sk-GM3AyFSCFHwbJdnC4c1a2637E4Bf4433AcFcAc8c3e976cFe"
+        )
         openai.api_base = "https://api.ai-yyds.com/v1"
 
         # load prompt message
-        with open(file_path, "r", encoding="utf-8") as file:
-            prompt = file.read()
+        if file_path:
+            with open(file_path, "r", encoding="utf-8") as file:
+                preprompt = file.read()
 
-        self.messages = [
-            {
-                "role": "system",
-                "content": "You are a desktop robotic arm with 6 degrees of freedom, and the end effector is a gripper. You need to understand my actions/language and assist me in completing the assembly of the parts.",
-            },
-            {
-                "role": "user",
-                "content": prompt,
-            },
-        ]
+        if preprompt:
+            self.messages = [
+                {
+                    "role": "system",
+                    "content": "You are a desktop robotic arm with 6 degrees of freedom, and the end effector is a gripper. You need to understand my actions/language and assist me in completing the assembly of the parts.",
+                },
+                {
+                    "role": "user",
+                    "content": preprompt,
+                },
+            ]
 
-        # 调用一次llm
-        self.get_llm_response()
+        self.model = model
 
+        if oncecall:
+            self.get_llm_response()
 
     def get_llm_response(self, user_input=None):
         """
@@ -38,7 +47,7 @@ class CodeGenerator:
             self.messages.append({"role": "user", "content": user_input})
 
         completion = openai.ChatCompletion.create(
-            model="gpt-4-0613",
+            model=self.model,
             # model="gpt-3.5-turbo",
             messages=self.messages,  # prompt
             temperature=0.2,  # 0~2, 数字越大越有想象空间, 越小答案越确定
@@ -57,15 +66,11 @@ class CodeGenerator:
         print(f"ChatGPT: {answer}")
 
 
-
-
 if __name__ == "__main__":
-
     prompt_path = "/workspaces/assemblyhelper/LLM/prompts/robot_prompt_update2.yml"
     codegenerator = CodeGenerator(prompt_path)
 
     while True:
-
         # 用户输入新的请求
         content = ""
         str = input("User: ")
@@ -74,5 +79,3 @@ if __name__ == "__main__":
             str = input("User: ")
 
         codegenerator.get_llm_response(content)
-
-
