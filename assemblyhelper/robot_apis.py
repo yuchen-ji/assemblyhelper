@@ -3,7 +3,6 @@ import sys
 
 sys.path.insert(0, "/workspaces/assemblyhelper")
 
-import re
 import cv2
 import math
 import yaml
@@ -92,7 +91,7 @@ def move_to_location(pose):
     """
     if isinstance(pose, list):
         pass
-    if isinstance(pose, str):
+    if isinstance(pose, context):
         pose = ASSEMBLY_LOCATION[pose]
         pass
 
@@ -176,7 +175,7 @@ def get_pointed_assembly_location(scene_des: List):
             pointed_name = name
     
     pointed_location = ASSEMBLY_LOCATION[pointed_name]
-    print(pointed_location)
+    # print(pointed_location)
     return pointed_location
 
 
@@ -369,10 +368,10 @@ def scene_parser(scene_des: List) -> str:
         pixel_coords = scene_des["centers"][idx]
         if category in ASSEMBLY_LOCATION:
             sixd_poses = ASSEMBLY_LOCATION[category]
-            single_format = f"{category}: {{'pixel coords': {str(pixel_coords)}}}; {{'6D pose': {str(sixd_poses)}}}"
+            single_format = f"{category}: {{'pixel coords': {context(pixel_coords)}}}; {{'6D pose': {context(sixd_poses)}}}"
             scene_des_context += single_format + "\n"
         elif category == "hand":
-            single_format = f"{category}: {{'pixel coords': {str(pixel_coords)}}}"
+            single_format = f"{category}: {{'pixel coords': {context(pixel_coords)}}}"
             scene_des_context += single_format + "\n"
 
     # print(scene_des_context)
@@ -412,11 +411,35 @@ def argparser():
 
 if __name__ == "__main__":
 
+    # args = argparser()
+    # load_config(args.config)
+    # init(args.labeldir, args.prompt, args.llmodel)
+
+    # image_path = "/workspaces/assemblyhelper/assets/assembly/bottom_right_2.jpg"
+    # scene_des = get_scene_descriptions(image_path)
+    # get_pointed_assembly_location(scene_des)
+
+
     args = argparser()
-    image_path = "/workspaces/assemblyhelper/assets/assembly/bottom_right_2.jpg"
-
-    init(args.labeldir, args.prompt, args.llmodel)
     load_config(args.config)
+    init(args.labeldir, args.prompt, args.llmodel)
 
+    while True:
+
+        # Text input
+        user_input = ""
+        context = input("User: ")
+        while context != "q":
+            user_input += context + "\n"
+            context = input("User: ")
+
+        # Speech input
+        
+        CODEGENERATOR.get_llm_response(user_input)
+
+
+
+
+    image_path = "/workspaces/assemblyhelper/assets/assembly/bottom_right_2.jpg"
     scene_des = get_scene_descriptions(image_path)
     get_pointed_assembly_location(scene_des)

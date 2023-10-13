@@ -67,7 +67,7 @@ class CodeGenerator:
 
 
 if __name__ == "__main__":
-    prompt_path = "/workspaces/assemblyhelper/LLM/prompts/robot_prompt_update2.yml"
+    prompt_path = "/workspaces/assemblyhelper/LLM/prompts/robot_prompt_update3.yml"
     codegenerator = CodeGenerator(prompt_path)
 
     while True:
