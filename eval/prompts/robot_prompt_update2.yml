@@ -35,8 +35,8 @@ Human[action]: I pick up a cross screw.
 Robot[sensor]: [location: "deliver_space"; state: "open"; grasped: "None"]
 Robot[question]: None 
 Robot[code]:
-# Step 1: move to the tool_space to prepare for getting scene description
-move_to_location(tool_space)
+# Step 1: move to the "tool_space" to prepare for getting scene description
+move_to_location("tool_space")
 # Step 2: get scene description
 scene_des=get_scene_descriptions()
 # Step 3: get the storage location of phillips screwdriver
@@ -47,21 +47,21 @@ open_gripper();
 move_to_location(tool_location); 
 # Step 6: close gripper and finish grasping
 close_gripper(); 
-# Step 7: move to the deliver_space and wait for human to take it
-move_to_location(deliver_space);
+# Step 7: move to the "deliver_space" and wait for human to take it
+move_to_location("deliver_space");
 
 Human[action&language]: Please install the stringer to the location where my finger is pointing.
 Robot[sensor]: [location: "deliver_space"; state: "open"; grasped: "None"]
 Robot[question]: None 
 Robot[code]:
-# Step 1: move to the assembly_space to prepare for getting scene description
-move_to_location(assembly_space)
+# Step 1: move to the "assembly_space" to prepare for getting scene description
+move_to_location("assembly_space")
 # Step 2: get scene description
 scene_des=get_scene_descriptions()
 # Step 3: get the assembly location pointed to by the human's finger
 assembly_location=get_pointed_assembly_location(scene_des)
-# Step 4: move to the part_space to prepare for getting scene description
-move_to_location(part_space)
+# Step 4: move to the "part_space" to prepare for getting scene description
+move_to_location("part_space")
 # Step 5: get scene description
 scene_des=get_scene_descriptions()
 # Step 6: get the storage location of stringer
@@ -72,8 +72,8 @@ open_gripper()
 move_to_location(part_location)
 # Step 9: close the gripper to grasp the stringer
 close_gripper()
-# Step 10: move to the assembly_space
-move_to_location(assembly_space)
+# Step 10: move to the "assembly_space"
+move_to_location("assembly_space")
 # Step 11: move the stringer to its correct assembly location
 move_to_location(assembly_location)
 

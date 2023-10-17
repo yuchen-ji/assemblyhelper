@@ -7,11 +7,14 @@ import cv2
 import math
 import yaml
 import json
+import queue
 import textwrap
 import argparse
+import threading
 import numpy as np
 from assemblyhelper.vis_utils import OpenDetector
 from assemblyhelper.llm_utils import CodeGenerator
+from assemblyhelper.lang_utils import SpeechRecognizer
 from typing import Any, Dict, List, Optional, Tuple
 
 
@@ -28,6 +31,7 @@ WORKSPACE = None
 
 OPENDETECTOR = None
 CODEGENERATOR = None
+SPEECHRECOGNIZER = None
 
 
 #   ----------------------
@@ -89,9 +93,11 @@ def move_to_location(pose):
     """
     机器人移动到指定位姿
     """
+    if isinstance(pose, str):
+        pose = WORKSPACE[pose][0]
     if isinstance(pose, list):
         pass
-    if isinstance(pose, context):
+    if isinstance(pose, List[List]):
         pose = ASSEMBLY_LOCATION[pose]
         pass
 
@@ -154,7 +160,6 @@ def get_grasp_pose(scene_des, obj_name) -> List:
 #   --------------------
 
 
-
 def get_pointed_assembly_location(scene_des: List):
     """
     使用固定的代码获取装配位姿
@@ -169,15 +174,14 @@ def get_pointed_assembly_location(scene_des: List):
         if name not in ASSEMBLY_LOCATION:
             continue
         pixel = scene_des["centers"][idx]
-        distance = np.linalg.norm(hand_pixel-pixel)
+        distance = np.linalg.norm(hand_pixel - pixel)
         if distance < min_distance:
             min_distance = distance
             pointed_name = name
-    
+
     pointed_location = ASSEMBLY_LOCATION[pointed_name]
     # print(pointed_location)
     return pointed_location
-
 
 
 def get_pointed_assembly_location2(scene_des: List) -> List:
@@ -187,13 +191,14 @@ def get_pointed_assembly_location2(scene_des: List) -> List:
     query_context = "The following is what you observed in the scene:" + "\n"
     query_context += scene_parser(scene_des)
     query_context += textwrap.dedent(
-    """
+        """
     What is the 6Dpose of the assembly location I am pointing to in your observation?    
 
     Your should first output the process of thought. 
     But your final outputs need to meet the following format:
     <output> [x, y, z, rx, ry, rz] </output>
-    """)
+    """
+    )
 
     locgenerator = CodeGenerator(preprompt=query_context, oncecall=False)
     loccontext = locgenerator.get_llm_response()
@@ -278,14 +283,26 @@ def get_signalinterfaceboard_grasp(bin_image) -> List:
 #   ---------------------------------------------
 
 
-def init(label_dir: str, prompt_path: str, llmodel: str):
+def init(
+    label_dir: str,
+    checkpoint: str,
+    spmodel: str,
+    english: bool,
+    energy: int,
+    pause: int,
+    dynamic_energy: bool,
+    wake_word: str,
+    llmodel: str,
+    prompt: str,
+    vmprompt: str,
+):
     """
     初始化变量，加载模型
     """
-
-    global OPENDETECTOR, CODEGENERATOR
-    OPENDETECTOR = OpenDetector(label_dir)
-    # CODEGENERATOR = CodeGenerator(prompt_path, llmodel)
+    global OPENDETECTOR, CODEGENERATOR, SPEECHRECOGNIZER
+    OPENDETECTOR = OpenDetector(label_dir, checkpoint)
+    SPEECHRECOGNIZER = SpeechRecognizer(spmodel, english, energy, pause, dynamic_energy, wake_word)
+    # CODEGENERATOR = CodeGenerator(file_path=prompt, model=llmodel)
 
 
 def load_config(file_path) -> None:
@@ -300,16 +317,25 @@ def load_config(file_path) -> None:
     WORKSPACE = data["workspace"]
 
 
-def determine_workspace(pose: list, space: str) -> bool:
+def determine_workspace() -> str:
     """
-    根据输入的pose和所在区域的名称, 判断是否在指定的区域
+    获取当前机器人所在的区域名称
     """
-    status = False
-    pose_gt = np.array(ASSEMBLY_LOCATION[space])
-    pose = np.array(pose)
-    if np.linalg.norm(pose_gt, pose) < 50:
+    workspace = "UNKNOWN"
+    pose = np.array([120, 150, 200])
+    for key, value in WORKSPACE.items():
+        ranges = np.array(value[1])
         status = True
-    return status
+        for idx, v in enumerate(pose):
+            if v >= ranges[idx][0] and v < ranges[idx][1]:
+                continue
+            else:
+                status = False
+                break
+        if status:
+            workspace = key
+            break
+    return workspace
 
 
 def pixel2cam(obj_des: List) -> List:
@@ -368,14 +394,32 @@ def scene_parser(scene_des: List) -> str:
         pixel_coords = scene_des["centers"][idx]
         if category in ASSEMBLY_LOCATION:
             sixd_poses = ASSEMBLY_LOCATION[category]
-            single_format = f"{category}: {{'pixel coords': {context(pixel_coords)}}}; {{'6D pose': {context(sixd_poses)}}}"
+            single_format = f"{category}: {{'pixel coords': {pixel_coords}}}; {{'6D pose': {sixd_poses}}}"
             scene_des_context += single_format + "\n"
         elif category == "hand":
-            single_format = f"{category}: {{'pixel coords': {context(pixel_coords)}}}"
+            single_format = f"{category}: {{'pixel coords': {pixel_coords}}}"
             scene_des_context += single_format + "\n"
 
     # print(scene_des_context)
     return scene_des_context
+
+
+def transfer_instructions(vis_queue, lang_queue):
+    """
+    将视觉指令和语言指令，调整为合适的格式
+    """
+    trans_data = None
+    while trans_data == None:
+        if not vis_queue.empty():
+            trans_data = "Human[action]: {}".format(vis_queue.get())
+        elif not lang_queue.empty():
+            trans_data = "Human[language]: {}".format(lang_queue.get())
+
+    # Get sensor data
+    ROBOT_SENSOR[1] = determine_workspace()
+    sensor_data = f'Robot[sensor]: [location: "{ROBOT_SENSOR[0]}"; state: "{ROBOT_SENSOR[1]}"; grasped: "{ROBOT_SENSOR[2]}"]'
+    query_data = trans_data + "\n" + sensor_data
+    return query_data
 
 
 def argparser():
@@ -384,33 +428,63 @@ def argparser():
     """
     parser = argparse.ArgumentParser()
 
+    # Config
     parser.add_argument(
-        "--config", default="/workspaces/assemblyhelper/config/config.yml", help="装配位置的配置文件"
+        "--config",
+        default="/workspaces/assemblyhelper/config/config.yml",
+        help="装配位置的配置文件",
+    )
+
+    # Detector
+    parser.add_argument(
+        "--label_dir",
+        default="/workspaces/assemblyhelper/datasets/labels",
+        help="目标检测的标签文件",
     )
     parser.add_argument(
         "--checkpoint",
-        default="/workspaces/assemblyhelper/thirdparty/sam_vit_h_4b8939.pth", help="SAM的模型权重"
-    )
-    parser.add_argument(
-        "--labeldir", default="/workspaces/assemblyhelper/datasets/labels", help="目标检测的标签文件"
-    )
-    parser.add_argument(
-        "--llmodel", default="gpt-3.5-turbo", help="使用的语言模型"
-    )
-    parser.add_argument(
-        "--prompt", default="/workspaces/assemblyhelper/config/robot_prompt_update2.yml", help="用于代码生成的prompt"
-    )
-    parser.add_argument(
-        "--vmprompt", default="/workspaces/assemblyhelper/config/vm_prompt.yml", help="人手指向分析的prompt"
+        default="/workspaces/assemblyhelper/thirdparty/sam_vit_h_4b8939.pth",
+        help="SAM的模型权重",
     )
 
+    # Speech to text
+    parser.add_argument("--spmodel", default="base", help="使用的whisper模型权重")
+    parser.add_argument("--english", default=False, help="是否限制语言类型为英语")
+    parser.add_argument("--energy", default=500, help="固定的用于检测声音的阈值")
+    parser.add_argument("--pause", default=1.5, help="间隔用于检测短句")
+    parser.add_argument("--dynamic_energy", default=True, help="设置动态能量阈值")
+    parser.add_argument("--wake_word", default="hey", help="用于唤醒llm响应的唤醒词")
+
+    # Large language model
+    parser.add_argument("--llmodel", default="gpt-3.5-turbo", help="使用的语言模型")
+    parser.add_argument(
+        "--prompt",
+        default="/workspaces/assemblyhelper/config/robot_prompt_update2.yml",
+        help="用于代码生成的prompt",
+    )
+    parser.add_argument(
+        "--vmprompt",
+        default="/workspaces/assemblyhelper/config/vm_prompt.yml",
+        help="人手指向分析的prompt",
+    )
 
     args = parser.parse_args()
     return args
 
 
-if __name__ == "__main__":
+#   ---------------------------------------------
+#   Test APIs
+#   ---------------------------------------------
 
+
+def test_configs():
+    args = argparser()
+    load_config(args.config)
+    workspace = determine_workspace()
+    print(workspace)
+
+
+def test_pointed():
     # args = argparser()
     # load_config(args.config)
     # init(args.labeldir, args.prompt, args.llmodel)
@@ -418,28 +492,67 @@ if __name__ == "__main__":
     # image_path = "/workspaces/assemblyhelper/assets/assembly/bottom_right_2.jpg"
     # scene_des = get_scene_descriptions(image_path)
     # get_pointed_assembly_location(scene_des)
+    pass
 
 
+def test_pipeline():
+    """
+    测试流程
+    """
     args = argparser()
     load_config(args.config)
-    init(args.labeldir, args.prompt, args.llmodel)
+
+    detect_keys = dict(
+        label_dir = args.label_dir,
+        checkpoint = args.checkpoint,
+    )
+    speech_keys = dict(
+        spmodel = args.spmodel,
+        english = args.english,
+        energy = args.energy,
+        pause = args.pause,
+        dynamic_energy = args.dynamic_energy,
+        wake_word = args.wake_word,
+    )
+    llm_keys = dict(
+        llmodel = args.llmodel,
+        prompt = args.prompt,
+        vmprompt = args.vmprompt,
+    )
+    init(**detect_keys, **speech_keys, **llm_keys)
+
+    # Start all moudles: "Speech-to-text", "Action recognition"
+    threads = []
+    audio_thread = threading.Thread(target=SPEECHRECOGNIZER.record_audio)
+    trans_thread = threading.Thread(target=SPEECHRECOGNIZER.transcribe_audio)
+    threads.extend([audio_thread, trans_thread])
+
+    # 启动线程，但并不需要等所有线程终止才进行主线程
+    for thd in threads:
+        thd.start()
 
     while True:
-
-        # Text input
-        user_input = ""
-        context = input("User: ")
-        while context != "q":
-            user_input += context + "\n"
-            context = input("User: ")
+        # # Text input
+        # query = ""
+        # context = input("User: ")
+        # while context != "q":
+        #     query += context + "\n"
+        #     context = input("User: ")
 
         # Speech input
-        
-        CODEGENERATOR.get_llm_response(user_input)
+        vis_queue = queue.Queue()   # 之后使用action的模型进行代替
+        query = transfer_instructions(vis_queue, SPEECHRECOGNIZER.text_queue)
+
+        # # Action
+        # CODEGENERATOR.get_llm_response(query)
 
 
+def text_query():
+    args = argparser()
+    load_config(args.config)
+    vis_queue, lang_queue = queue.Queue(), queue.Queue()
+    transfer_instructions(vis_queue, lang_queue)
 
 
-    image_path = "/workspaces/assemblyhelper/assets/assembly/bottom_right_2.jpg"
-    scene_des = get_scene_descriptions(image_path)
-    get_pointed_assembly_location(scene_des)
+if __name__ == "__main__":
+    test_pipeline()
