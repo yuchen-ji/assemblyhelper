@@ -12,6 +12,7 @@ import textwrap
 import argparse
 import threading
 import numpy as np
+from datetime import datetime
 from assemblyhelper.vis_utils import OpenDetector
 from assemblyhelper.llm_utils import CodeGenerator
 from assemblyhelper.lang_utils import SpeechRecognizer
@@ -254,14 +255,15 @@ def get_stringer_grasp(bin_image) -> List:
     """
     获取桁条的抓取姿态
     """
-    rot_bbox = get_rot_bbox(bin_image)
-    (cx, cy), (w, h), r = rot_bbox
+    results = get_nearest_surface(bin_image)
+    # rot_bbox = get_rot_bbox(bin_image)
+    # (cx, cy), (w, h), r = rot_bbox
 
-    x = cx.astype(int)
-    y = cy.astype(int)
-    r_rad = 90 * (math.pi / 180)
+    # x = cx.astype(int)
+    # y = cy.astype(int)
+    # r_rad = 90 * (math.pi / 180)
 
-    return [x, y, r_rad]
+    # return [x, y, r_rad]
 
 
 def get_battery_grasp(bin_image) -> List:
@@ -362,6 +364,79 @@ def end2base(obj_pos: List) -> List:
     pass
 
 
+def get_nearest_surface(bin_image):
+    """
+    获取离相机最近的表面
+    """
+    # 1. 加载depth和mask的图像
+    # 2. 根据mask图像筛选depth的目标区域
+    # 3. 将masked depth图像，送入某些算法，提取离相机近的平面
+    # 4. 返回最近平面对应的mask和bbox
+    # ------------------------------------
+    # 5. 在grasp函数中计算新的mask对应的中心点
+    # 6. 根据mask的2d中心点计算3d坐标
+
+    latest_file = get_latest_file()
+    img_info = np.load(latest_file, allow_pickle=True)
+    color_data = img_info[()]['color']
+    point_data = img_info[()]['pointcloud']
+    # 只计算前两个维度
+    projected_cloud = point_data[:, :, :2]
+
+    # 选择mask区域的中心点的indices，和对应的xyz
+    mask_indices = np.argwhere(bin_image != 0)
+    mean_xy = np.mean(projected_cloud[mask_indices[:, 0], mask_indices[:, 1]], axis=0)
+    # mean_xy = np.array([mean_xy[0], mean_xy[1], 0])
+    min_z = np.min(point_data[:, :, 2])
+
+    selected_indices = [0, 0]
+    min_distance = 1e10        
+    # for i in range(projected_cloud.shape[0]):
+    #     for j in range(projected_cloud.shape[1]):
+    #         distance = np.linalg.norm(projected_cloud[i, j] - mean_xy)
+    #         if distance < min_distance:
+    #             min_distance = distance
+    #             selected_indices = [j, i]
+    for idx in mask_indices:
+        distance = np.linalg.norm(projected_cloud[idx[0], idx[1]] - mean_xy)
+        if distance < min_distance:
+            if np.linalg.norm(point_data[idx[0], idx[1]][2] - min_z) <= 0.005:
+                min_distance = distance
+                selected_indices = [idx[1], idx[0]] 
+
+    # print(projected_cloud[32, 507])
+    print(point_data[42, 221])
+    print(point_data[idx[0], idx[1]])       
+    # print(min_distance)
+    cv2.circle(color_data, selected_indices, radius=5, color=[0,0,255], thickness=-1)
+    cv2.circle(color_data, [221, 42], radius=5, color=[0,0,255], thickness=-1)
+    cv2.imwrite("1_.png", color_data)
+
+
+def get_latest_file():
+    """
+    读取最新的拍摄文件
+    """
+    folder_path = "/workspaces/assemblyhelper/assemblyhelper/streams"
+    files = os.listdir(folder_path)
+    
+    # 将文件的名称和时间戳存储成字典
+    timestamps = {}
+    for file in files:
+        timestamp = file.split('_')[-1].split('.')[0]
+        try:
+            timestamp = datetime.strptime(timestamp, "%Y-%m-%d-%H-%M-%S")
+            timestamps[file] = timestamp
+        except ValueError:
+            continue
+    
+    # 选择最大的时间
+    if timestamp:
+        latest_file = max(timestamps, key=timestamps.get)
+
+    return os.path.join(folder_path, latest_file)
+
+
 def get_rot_bbox(bin_image) -> List:
     """
     获取分割图像中，最小的旋转边界框
@@ -438,7 +513,7 @@ def argparser():
     # Detector
     parser.add_argument(
         "--label_dir",
-        default="/workspaces/assemblyhelper/datasets/labels",
+        default="/workspaces/assemblyhelper/dataset/labels",
         help="目标检测的标签文件",
     )
     parser.add_argument(
@@ -547,12 +622,40 @@ def test_pipeline():
         # CODEGENERATOR.get_llm_response(query)
 
 
-def text_query():
+def test_query():
     args = argparser()
     load_config(args.config)
     vis_queue, lang_queue = queue.Queue(), queue.Queue()
     transfer_instructions(vis_queue, lang_queue)
 
 
+def test_grasp():
+    args = argparser()
+    load_config(args.config)
+
+    detect_keys = dict(
+        label_dir = args.label_dir,
+        checkpoint = args.checkpoint,
+    )
+    speech_keys = dict(
+        spmodel = args.spmodel,
+        english = args.english,
+        energy = args.energy,
+        pause = args.pause,
+        dynamic_energy = args.dynamic_energy,
+        wake_word = args.wake_word,
+    )
+    llm_keys = dict(
+        llmodel = args.llmodel,
+        prompt = args.prompt,
+        vmprompt = args.vmprompt,
+    )
+    init(**detect_keys, **speech_keys, **llm_keys)
+    scene_des = get_scene_descriptions('1.png')
+    get_grasp_pose(scene_des, "stringer")
+    pass
+
+
 if __name__ == "__main__":
-    test_pipeline()
+    # test_pipeline()
+    test_grasp()

@@ -36,7 +36,7 @@ class OpenDetector:
         resize and rewrite the image
         """
         im = cv2.imread(image_path)
-        w_h = 512
+        w_h = 640
         height, width, _ = im.shape
         ratio = max(width, height) / w_h
         new_width = int(width / ratio)
@@ -111,6 +111,66 @@ class OpenDetector:
             original_image.convert("RGBA"), overlay_image
         )
 
+    def calculate_overlap_ratio(self, image1, image2):
+
+        # 计算交集
+        intersection = np.logical_and(image1, image2)
+        intersection_area = np.sum(intersection)
+
+        # 计算两个图像的总面积
+        total_area_image1 = np.sum(image1)
+        total_area_image2 = np.sum(image2)
+
+        # 计算重叠区域比例
+        overlap_ratio = intersection_area / min(total_area_image1, total_area_image2)
+
+        return overlap_ratio
+    
+    def filter_overlap_image(self, masks):
+        filter = []
+        filter_pairs = []
+        overlap_ratios = []
+        for i in range(len(masks)):
+            for j in range(i+1, len(masks)):
+                
+                image1 = masks[i]["segmentation"]
+                image2 = masks[j]["segmentation"]
+                
+                # 将重叠的小的部分都过滤掉
+                if np.sum(image1) < np.sum(image2):
+                    selected_idx = i
+                else:
+                    selected_idx = j
+                    
+                overlap_ratio = self.calculate_overlap_ratio(image1, image2)
+                if overlap_ratio >= 0.8:
+                    filter.append(selected_idx)
+                    filter_pairs.append((i, j))
+                    overlap_ratios.append(overlap_ratio)
+
+        # 打印筛选出的图像对
+        for idx, pair in enumerate(filter_pairs):
+            print(f"Image {pair[0]} and Image {pair[1]} have an overlap ratio of {overlap_ratios[idx]}")
+
+        return filter
+
+    def filter_background(self, masks):
+        # filter background
+        filter = []
+        for i in range(len(masks)):    
+            im = masks[i]["segmentation"]
+            top_left = im[0:20, 0:20]
+            top_right = im[0:20, -20:]
+            bottom_left = im[-20:, :20]
+            bottom_right = im[-20:, -20:]
+            background = np.sum(top_left) + np.sum(top_right) + np.sum(bottom_left) + np.sum(bottom_right)
+        #     print(background)
+        #     if background >= 720:
+            if background >= 360:
+                filter.append(i)
+        return filter
+        
+
     def detect(self, image_path):
         """
         检测整个场景，输入整张图像，输出该场景中符合数据集类别的信息，包括（中心点，边界框，类别，分割图）
@@ -141,31 +201,36 @@ class OpenDetector:
             # cv2.rectangle(ori_image, (x1, y1), (x2, y2), (0, 0, 255), thickness=3)
             # cv2.imwrite("1_.jpg", ori_image)
 
+        # Filter images, 
+        filter_idx = []
+        filter_idx.extend(self.filter_overlap_image(masks))
+        filter_idx.extend(self.filter_background(masks))
+
         # Use clip to recognize
         @torch.no_grad()
         def retriev(elements, search_label: str) -> int:
             # process imgs
-            preprocessed_images = [
-                self.preprocess(image).to(device) for image in elements
-            ]
+            preprocessed_images = [self.preprocess(image).to(device) for image in elements]
             stacked_images = torch.stack(preprocessed_images)
             image_features = self.model.encode_image(stacked_images)
             image_features /= image_features.norm(dim=-1, keepdim=True)
+
             # process labels
             label_features = []
             for label in search_label:
-                preprocessed_label = torch.stack(
-                    [self.preprocess(l).to(device) for l in label]
-                )
+                preprocessed_label = torch.stack([self.preprocess(l).to(device) for l in label])
                 label_feature = self.model.encode_image(preprocessed_label)
                 label_feature /= label_feature.norm(dim=-1, keepdim=True)
                 label_feature = torch.mean(label_feature, dim=0, keepdim=False)
                 label_features.append(label_feature)
             label_features = torch.stack(label_features)
 
-            # Calculate similar scores (Num x Class)
-            probs = 100.0 * image_features @ label_features.T
-            return probs[:, :].softmax(dim=0)
+            # Calculate similar scores
+            # print(f"image_shape:{image_features.shape}")
+            # print(f"text_shape:{label_features.shape}")
+            probs = 100. * image_features @ label_features.T
+            print(f"image_text_shape: {probs.shape}")
+            return probs[:, :].softmax(dim=-1)
 
         # Load labeled images
         cls_names = os.listdir(self.label_dir)
@@ -180,13 +245,15 @@ class OpenDetector:
 
         # Calculate labels
         scores = retriev(cropped_imgs, labels)
-        indices = self.get_indices_of_values_above_threshold(scores, 0.05)
+        indices = self.get_indices_of_values_above_threshold(scores, 0.1)
 
         # Process mask, class, center, bbox
         results = {}
         masks_, classes_, centers_, bboxes_ = [], [], [], []
         for seg_idx, cls_idx in enumerate(indices):
             if cls_idx == -1:
+                continue
+            if seg_idx in filter_idx:
                 continue
 
             if cls_names[cls_idx] == "framework":
@@ -258,9 +325,11 @@ class OpenDetector:
         results["centers"] = np.array(centers_)
         results["bboxes"] = np.array(bboxes_)
 
+        np.save("info.npy", results)
+
         return results
 
 
 if __name__ == "__main__":
-    opendetector = OpenDetector("/workspaces/assemblyhelper/datasets/labels")
-    opendetector.detect("/workspaces/assemblyhelper/assets/assembly/1.jpg")
+    opendetector = OpenDetector("dataset/labels")
+    opendetector.detect("1.png")
