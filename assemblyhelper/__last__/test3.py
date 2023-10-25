@@ -2,9 +2,9 @@ import cv2
 import numpy as np
 from sklearn.ensemble import IsolationForest
 
-mask_info = np.load('info.npy', allow_pickle=True)[()]
+mask_info = np.load('example/info.npy', allow_pickle=True)[()]
 # img_info = np.load('assemblyhelper/streams/capture_2023-10-24-14-57-38.npy', allow_pickle=True)[()]
-img_info = np.load('assemblyhelper/streams/capture.npy', allow_pickle=True)[()]
+img_info = np.load('example/capture.npy', allow_pickle=True)[()]
 
 
 grasp_idx = [i for i, v in enumerate(mask_info["classes"]) if v == 'stringer'][0]
@@ -45,4 +45,4 @@ for idx in final_indices:
             selected_indices = [idx[1], idx[0]] 
 
 cv2.circle(color_data, selected_indices, radius=5, color=[0,255,0], thickness=-1)
-cv2.imwrite("1_.png", color_data)
+cv2.imwrite("example/1_.png", color_data)

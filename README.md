@@ -73,10 +73,10 @@
 
 
 ## **Related human action**
-1. stand （still）
-2. pick up fastener （extend left hand， dynamic）
-3. receive tools or parts （extend right hand，still）
-4. assembly （extend both hands， still）
+1. stand （long）
+2. pick up fastener （extend left hand， short）
+3. receive tools or parts （extend right hand，long）
+4. assembly （extend both hands， short）
 5. other adversarial action
 
 ## **Memory bank**
@@ -92,6 +92,15 @@
 | :---- | :---- | :---- | :---- |
 | 1 | all parts | all tools | framework |
 | n | ... | ... | ... | ... |
+
+
+# Pipeline
+1. 系统感知人类通过语言/动作指令 \
+(动作指令只有当是特定的，才会被处理。语言指令需要有特定的唤醒词）
+2. 指令被处理后会发送给语言模型，反馈对应的代码 \
+(代码会送到AR眼镜中，让人类观测，对于合适的指令，人类会进行确认)
+3. 最终确认后的代码会被执行 \
+(如果队列中有多个query时，会依次请求人类确认)
 
 
 # TODO

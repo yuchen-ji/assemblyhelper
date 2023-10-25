@@ -46,6 +46,7 @@ class OpenDetector:
         # print(f"origin: {width},{height}")
         # print(f"resize: {new_width},{new_height}")
         cv2.imwrite(image_path, im)
+        return im
 
     def convert_box_xywh_to_xyxy(self, box) -> List:
         """
@@ -179,9 +180,9 @@ class OpenDetector:
         device = self.device
 
         # Generate masks
-        self.process_img(image_path)
+        # self.process_img(image_path)
         image = cv2.imread(image_path)
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         masks = self.mask_generator.generate(image)
 
         # Cut out all masks and each mask's bboxes

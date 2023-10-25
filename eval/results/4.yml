@@ -1,0 +1,52 @@
+################################################################################################
+######## GPT4: Please install the stringer to the location where my finger is pointing. ########
+################################################################################################
+
+
+######################################
+############### PROMPT ###############
+######################################
+
+
+######################################
+############### RESULT ###############
+######################################
+
+ChatGPT: Yes, I am ready to assist you in assembling the parts. Please provide me with the next step or instruction.
+User: Robot[sensor]: [location: "deliver_space"; state: "open"; grasped: "None"] 
+User: Human[action&language]: Please install the stringer to the location where my finger is pointing.
+User: q
+
+ChatGPT: Robot[thought]: Move to the part_space; get the location of stringer; grasp the stringer; move to the assembly_space; get the location where the human finger is pointing; install the stringer to the pointed location.
+Robot[question]: None
+Robot[code]:
+# Step 1: move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: get scene description
+scene_des=get_scene_descriptions()
+# Step 3: get the storage location of stringer
+part_loc=get_storage_location(scene_des, "stringer")
+# Step 4: get the safe location on the left of the stringer, that avoiding collisions.
+safe_loc=[part_loc[0], part_loc[1]-50, part_loc[2], part_loc[3], part_loc[4], part_loc[5]]
+# Step 5: move to the safe location
+move_to_location(safe_loc)
+# Step 6: open the gripper
+open_gripper()
+# Step 7: move to the location of the stringer
+move_to_location(part_loc)
+# Step 8: close the gripper to grasp the stringer
+close_gripper()
+# Step 9: move to the safe location
+move_to_location(safe_loc)
+# Step 10: move to the "assembly_space" to prepare for getting assembly location
+move_to_location("assembly_space")
+# Step 11: get scene description
+scene_des=get_scene_descriptions()
+# Step 12: get the assembly location where the human finger is pointing
+assembly_loc=get_pointed_assembly_location(scene_des)
+# Step 13: move to the assembly location
+move_to_location(assembly_loc)
+# Step 14: open the gripper to install the stringer
+open_gripper()
+# Step 15: move back to the safe location
+move_to_location(safe_loc)

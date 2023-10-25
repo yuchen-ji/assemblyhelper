@@ -11,7 +11,7 @@ openai.api_base = "https://api.ai-yyds.com/v1"
 
 
 # load prompt message
-file_path = "LLM/prompts/robot_prompt_update2.yml"  # 替换为您的文件路径
+file_path = "eval/prompts/robot_prompt_update6.yml"  # 替换为您的文件路径
 with open(file_path, "r", encoding="utf-8") as file:
     prompt = file.read()
 
@@ -28,8 +28,8 @@ messages = [
 
 while True:
     completion = openai.ChatCompletion.create(
-        # model="gpt-4-0613",
-        model="gpt-3.5-turbo",
+        model="gpt-4-0613",
+        # model="gpt-3.5-turbo",
         messages=messages,  # prompt
         temperature=0.2,  # 0~2, 数字越大越有想象空间, 越小答案越确定
         n=1,  # 生成的结果数

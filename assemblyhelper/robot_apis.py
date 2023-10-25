@@ -618,8 +618,14 @@ def test_pipeline():
         vis_queue = queue.Queue()   # 之后使用action的模型进行代替
         query = transfer_instructions(vis_queue, SPEECHRECOGNIZER.text_queue)
 
+
         # # Action
         # CODEGENERATOR.get_llm_response(query)
+
+        # 将query和answer整合后反馈给ARglass
+        # 人类的确认，如果同意则执行，否则继续读取下一组信号
+        # 经过确认的代码部分交给真实机器人执行，需要有一个线程（函数）一直在等待代码的接收获
+        
 
 
 def test_query():
