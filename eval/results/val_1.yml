@@ -1,0 +1,29 @@
+Robot[code]:
+Step 1: Move to the assembly_space to prepare for getting the finger pointing location
+move_to_location("assembly_space")
+Step 2: Get the trajectory sequence of poses for the finger pointing location
+finger_poses = get_pointed_assembly_location("assembly_space")
+Step 3: Move to the finger pointing location
+move_to_location_by_trajectory(finger_poses)
+Step 4: Open the gripper
+open_gripper()
+Step 5: Move to the part_space to prepare for grasping the stringer
+move_to_location("part_space")
+Step 6: Get the location of the stringer
+part_space_des = get_scene_descriptions()
+stringer_loc = get_storage_location(part_space_des, "stringer")
+Step 7: Get the safe location near the stringer to avoid collisions
+safe_stringer_loc = get_safe_location("stringer", stringer_loc)
+Step 8: Move to the safe location
+move_to_location(safe_stringer_loc)
+Step 9: Close the gripper to grasp the stringer
+close_gripper()
+Step 10: Move to the finger pointing location in the assembly_space to install the stringer
+move_to_location_by_trajectory(finger_poses)
+
+Validation questions:
+Which space do you move to in Step 1 and why?
+How do you get the trajectory sequence of poses for the finger pointing location in Step 2?
+Which space do you move to in Step 5 and why?
+How do you get the location of the stringer in Step 6?
+What do you do in Step 9?
