@@ -1,0 +1,96 @@
+################################################################################################
+################### GPT4: scene description generation after robot excute. ###################
+################################################################################################
+
+
+######################################
+############### PROMPT ###############
+######################################
+
+You should act as an scene detector used to detect new scene observations after a desktop robot completes its actions. 
+The initial situation of the scene is as follows:
+
+Here are some basic definitions to help you understand the code:
+Your coordinate system uses the following directions, lengths, and units:
+- Forward: Positive X-axis
+- Right: Positive Y-axis
+- Upward: Positive Z-axis
+
+Key Locations:
+- deliver_space: Space for exchanging objects with a human.
+- part_space: Space for grasping parts.
+- tool_space: Space for grasping tools.
+- assembly_space: Space for accessing scene descriptions and human finger locations.
+
+Robot APIs:
+- stop(): Stop the robot's movement.
+- open_gripper(): Open the gripper.
+- close_gripper(): Close the gripper.
+- set_speed(rate): Set the robot's speed to the given rate.
+- move_to_location(pose): Move to the specified 6D pose.
+- move_to_location_by_trajectory(pose_seq): Move to the specified 6D pose by a trajectory sequence of 6D poses.
+- get_safe_location(obj_name, obj_location): Input object name and object location. Return safe location to pass through before and after grasping objects.
+- get_current_location(): Return the current gripper location.
+- get_scene_descriptions(): Return descriptions of objects in the current space.
+- get_storage_location(space_des, obj_name): Input space description and object name. Return the 6D pose for its storage location.
+- get_pointed_assembly_location(space_des): Input the space description. Returns a 6D poses trajectory sequence that moves to the assembly position of the finger.
+
+Your output needs to conform to the standard format of the scene description, as follows:
+- Space[observation]: [tool_space: ["object list in the tool_space"]; part_space: ["object list in the tool_space"]; assembly_space: ["object list in the tool_space"]]
+- Robot[sensor]: [location: "the space where the gripper is located": "open/closed"; grasped: "None"]
+
+All your outputs need to meet the following format:
+- Detector[thought]: Explain the main step you need to take.
+- Detector[question]: Always ask me a clarification questions if you are unsure.
+- Detector[scene]: Output scene description in standard format.
+
+Here are some examples of human action/language intentions and the code you responded to:
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Sensor[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Robot[code]:
+# Step 1: move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: close gripper
+close_gripper()
+
+Detector[thought]: I noticed that scene observation in Space[observation] and Sensor[sensor]. Also, I know from Robot[code] that the robot move to the "part_space"; close the gripper. So, the robot did not grasp anything, but gripper location and status has changed.
+Detector[question]: None
+Detector[scene]: 
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Sensor[sensor]: [location: "part_space"; gripper: "close"; grasped: "None"]
+
+You need to detect the scene observation in Space[observation] and Sensor[sensor] and analyze the code robot execution in Robot[code], and then output the scene observation after the robot executes all the code.
+Please follow strict standrd format, are you ready?
+
+######################################
+############### Result ###############
+######################################
+
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Sensor[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Robot[code]:
+# Step 1: move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: get part_space description
+part_space_des=get_scene_descriptions()
+# Step 3: get the storage location of stringer
+part_loc=get_storage_location(part_space_des, "stringer")
+# Step 4: get the safe location on the left of the stringer, that avoiding collisions
+safe_part_loc= get_safe_location("stringer", part_loc)
+# Step 5: move to the safe location
+move_to_location(safe_part_loc)
+# Step 6: open the gripper
+open_gripper()
+# Step 7: move to the location of the stringer
+move_to_location(part_loc)
+# Step 8: close the gripper to grasp the stringer
+close_gripper()
+# Step 9: move to the safe location
+move_to_location(safe_part_loc)
+
+
+Detector[thought]: The robot moved to the "part_space", got the scene description, and located the "stringer". It then moved to a safe location near the "stringer", opened the gripper, moved to the "stringer", closed the gripper to grasp it, and finally moved back to the safe location. The "stringer" should now be in the robot's gripper.
+Detector[question]: None
+Detector[scene]:
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "three stringers", "signal interface board"]; assembly_space: ["framework"]]
+Sensor[sensor]: [location: "part_space"; gripper: "close"; grasped: "stringer"]

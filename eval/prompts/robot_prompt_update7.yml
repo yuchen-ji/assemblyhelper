@@ -19,7 +19,8 @@ Robot APIs:
 - close_gripper(): Close the gripper.
 - set_speed(rate): Set the robot's speed to the given rate.
 - move_to_location(pose): Move to the specified 6D pose.
-- move_to_location_by_trajectory(pose): Move to the specified 6D pose by a trajectory sequence of 6D poses.
+- move_to_location_by_trajectory(pose_seq): Move to the specified 6D pose by a trajectory sequence of 6D poses.
+- get_safe_location(obj_name, obj_location): Input object name and object location. Return safe location to pass through before and after grasping objects.
 - get_current_location(): Return the current gripper location.
 - get_scene_descriptions(): Return descriptions of objects in the current space.
 - get_storage_location(scene_des, obj_name): Input scene description and object name. Return the 6D pose for its storage location.
@@ -43,7 +44,7 @@ scene_des=get_scene_descriptions()
 # Step 3: get the storage location of stringer
 part_loc=get_storage_location(scene_des, "stringer")
 # Step 4: get the safe location on the left of the stringer, that avoiding collisions.
-safe_loc=[part_loc[0], part_loc[1]-50, part_loc[2], part_loc[3], part_loc[4], part_loc[5]]
+safe_loc= get_safe_location("stringer", part_loc)
 # Step 5: move to the safe location
 move_to_location(safe_loc)
 # Step 6: open the gripper

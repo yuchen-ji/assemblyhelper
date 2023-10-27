@@ -1,11 +1,51 @@
+################################################
+################ Code Generation ###############
+################################################
+
 # 根据人类动作，递送工具的任务
-Robot[sensor]: [location: "deliver_space"; state: "open"; grasped: "None"]
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "tree stringers", "signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[action]: I pick up a cross screw, pass me the appropriate tools.
 
+# 人类伸手，机器人松开工具
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver"]; part_space: ["battery", "tree stringers", "signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "hex screwdriver"]
+Human[action]: I reach out my hand for tools/parts in the gripper.
+
 # 根据人类简单语言，移动零件至装配处的任务
-Robot[sensor]: [location: "deliver_space"; state: "open"; grasped: "None"]
-Human[action&language]: Please install the stringer to the location where my finger is pointing.
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[language]: Please install the stringer to the location where my finger is pointing.
 
 # 根据人类清晰语言，移动零件至装配处的任务
-Robot[sensor]: [location: "deliver_space"; state: "open"; grasped: "None"]
-Human[action&language]: Please stringer the stringer and install it to the location where my finger is pointing.
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[language]: Please stringer the stringer and install it to the location where my finger is pointing.
+
+
+
+################################################
+############### Scene Generation ###############
+################################################
+
+# 根据机器人执行的代码，更新环境观测
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Sensor[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Robot[code]:
+# Step 1: move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: get part_space description
+part_space_des=get_scene_descriptions()
+# Step 3: get the storage location of stringer
+part_loc=get_storage_location(part_space_des, "stringer")
+# Step 4: get the safe location on the left of the stringer, that avoiding collisions
+safe_part_loc= get_safe_location("stringer", part_loc)
+# Step 5: move to the safe location
+move_to_location(safe_part_loc)
+# Step 6: open the gripper
+open_gripper()
+# Step 7: move to the location of the stringer
+move_to_location(part_loc)
+# Step 8: close the gripper to grasp the stringer
+close_gripper()
+# Step 9: move to the safe location
+move_to_location(safe_part_loc)

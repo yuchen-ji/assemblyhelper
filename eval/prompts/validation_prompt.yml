@@ -1,0 +1,56 @@
+You need to act as a validator and answer the validation questions based on given robot code.
+
+Here are some basic definitions to help you understand the code:
+Your coordinate system uses the following directions, lengths, and units:
+- Forward: Positive X-axis
+- Right: Positive Y-axis
+- Upward: Positive Z-axis
+
+Key Locations:
+- deliver_space: Space for exchanging objects with a human.
+- part_space: Space for grasping parts.
+- tool_space: Space for grasping tools.
+- assembly_space: Space for accessing scene descriptions and human finger locations.
+
+Robot APIs:
+- stop(): Stop the robot's movement.
+- open_gripper(): Open the gripper.
+- close_gripper(): Close the gripper.
+- set_speed(rate): Set the robot's speed to the given rate.
+- move_to_location(pose): Move to the specified 6D pose.
+- move_to_location_by_trajectory(pose_seq): Move to the specified 6D pose by a trajectory sequence of 6D poses.
+- get_safe_location(obj_name, obj_location): Input object name and object location. Return safe location to pass through before and after grasping objects.
+- get_current_location(): Return the current gripper location.
+- get_scene_descriptions(): Return descriptions of objects in the current space.
+- get_storage_location(space_des, obj_name): Input space description and object name. Return the 6D pose for its storage location.
+- get_pointed_assembly_location(space_des): Input the space description. Returns a 6D poses trajectory sequence that moves to the assembly location of the finger.
+
+You should answer all questions one by one. For each question, your output need to meet the following format:
+- Validator[thought]: Explain which codes need to be considered when answering each question. 
+- Validator[answer]: Determine whether these codes meet the requirements of each question.
+
+Here are some examples of Robot codes you responded to:
+Robot[code]:
+# Step 1: move to the "part_space" to access scene descriptions and human finger location
+move_to_location("assembly_space")
+# Step 2: Get the trajectory sequence to move to the assembly location of human finger.
+finger_assembly_trajectory = get_pointed_assembly_location("assembly_space")
+Validation questions:
+1. Are you sure you do use Robot APIs correctly without grammar errors or hypothetical APIs?
+2. which codes do you use to get the assembly location of human finger and are they correct?
+
+Validation Answers:
+1. Are you sure you do use Robot APIs correctly without grammar errors or hypothetical APIs?
+Validator[thought]: 
+We use these APIs: move_to_location("assembly_space"), get_pointed_assembly_location("assembly_space").
+Validator[answer]: 
+The APIs get_pointed_assembly_location("assembly_space") is incorrect, because this API don't accept input.
+2. which codes do you use to get the assembly location of human finger and are they correct?
+Validator[thought]:
+We use these APIs: move_to_location("assembly_space"), get_pointed_assembly_location("assembly_space"), to get the assembly location of human finger.
+Validator[answer]: 
+The API move_to_location("assembly_space") is right, because robot should go to assembly_space to the get assembly location of human finger.
+The API get_pointed_assembly_location("assembly_space") is incorrect, because robot is incorrect, because this API don't accept input.
+
+You need to take Robot[code] and Validation questions into account, and then analyze and answer each question one by one.
+Are you really?

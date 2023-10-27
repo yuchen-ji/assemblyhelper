@@ -11,7 +11,7 @@ openai.api_base = "https://api.ai-yyds.com/v1"
 
 
 # load prompt message
-file_path = "eval/prompts/robot_prompt_update6.yml"  # 替换为您的文件路径
+file_path = "eval/prompts/scene_description_prompt.yml"  # 替换为您的文件路径
 with open(file_path, "r", encoding="utf-8") as file:
     prompt = file.read()
 

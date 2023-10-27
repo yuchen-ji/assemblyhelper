@@ -1,0 +1,80 @@
+################################################################################################
+####### GPT-4: Please install the stringer to the location where my finger is pointing. ########
+################ GPT-4: I pick up a cross screw, pass me the appropriate tools. ################
+################################################################################################
+
+######################################
+############### PROMPT ###############
+######################################
+
+ChatGPT: Yes, I am ready to assist you in completing the assembly of the parts. Please provide me with your instructions.
+User: Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+User: Robot[sensor]: [location: "deliver_space"; state: "open"; grasped: "None"]
+User: Human[language]: Please install the stringer to the location where my finger is pointing.
+User: q
+ChatGPT: Robot[thought]: I need to first grasp the stringer from the part_space, then move to the assembly_space where the human finger is pointing, and finally install the stringer at that location.
+
+Robot[question]: None.
+
+Robot[code]:
+# Step 1: move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: get part_space description
+part_space_des = get_scene_descriptions()
+# Step 3: get the storage location of stringer
+part_loc = get_storage_location(part_space_des, "stringer")
+# Step 4: get the safe location on the left of the stringer, that avoiding collisions.
+safe_loc = get_safe_location("stringer", part_loc)
+# Step 5: move to the safe location
+move_to_location(safe_loc)
+# Step 6: open the gripper
+open_gripper()
+# Step 7: move to the location of the stringer
+move_to_location(part_loc)
+# Step 8: close the gripper to grasp the stringer
+close_gripper()
+# Step 9: move to the safe location
+move_to_location(safe_loc)
+# Step 10: move to the "assembly_space" to prepare for getting assembly location
+move_to_location("assembly_space")
+# Step 11: get assembly_space description
+assembly_space_des = get_scene_descriptions()
+# Step 12: get the pointed assembly location
+assembly_loc = get_pointed_assembly_location(assembly_space_des)
+# Step 13: move to the assembly location
+move_to_location(assembly_loc)
+# Step 14: open the gripper to install the stringer
+open_gripper()
+# Step 15: move back to the safe location
+move_to_location(safe_loc)
+
+
+User: Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "tree stringers", "signal interface board"]; assembly_space: ["framework"]]
+User: Robot[sensor]: [location: "deliver_space"; state: "open"; grasped: "None"]
+User: Human[action]: I pick up a cross screw, pass me the appropriate tools.
+User: q
+ChatGPT: Robot[thought]: The appropriate tool for a cross screw is a phillips screwdriver. I need to move to the tool_space, grasp the phillips screwdriver, and then move to the deliver_space to pass the tool to the human.
+Robot[question]: None.
+Robot[code]:
+# Step 1: move to the "tool_space" to prepare for getting tools' scene description
+move_to_location("tool_space")
+# Step 2: get tool_space description
+tool_space_des = get_scene_descriptions()
+# Step 3: get the storage location of phillips screwdriver
+tool_loc = get_storage_location(tool_space_des, "phillips screwdriver")
+# Step 4: get the safe location on the left of the phillips screwdriver, that avoiding collisions.
+safe_loc = get_safe_location("phillips screwdriver", tool_loc)
+# Step 5: move to the safe location
+move_to_location(safe_loc)
+# Step 6: open the gripper
+open_gripper()
+# Step 7: move to the location of the phillips screwdriver
+move_to_location(tool_loc)
+# Step 8: close the gripper to grasp the phillips screwdriver
+close_gripper()
+# Step 9: move to the safe location
+move_to_location(safe_loc)
+# Step 10: move to the "deliver_space" to pass the tool to the human
+move_to_location("deliver_space")
+# Step 11: open the gripper to deliver the phillips screwdriver
+open_gripper()
