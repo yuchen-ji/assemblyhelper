@@ -1,17 +1,3 @@
-# 任务难度划分
-1. 任务所需步骤: 执行任务所需的指令的数量
-2. 状态信息引入: 执行的任务是否需要考虑环境状态, 还是直接遵循人类的指令
-3. 任务的复杂性: 执行任务需要考虑人类的抽象指令, 以及API调用间的逻辑关系, 而不是简单遵循
-
-EASY: 少量的步骤, 不需要考虑状态信息, 直接遵循人类指令
-Middle: 中等的步骤, 需要考虑一定的状态信息, 有一定的抽象指令的理解和代码推理能力
-Hard: 较多的步骤, 较多的状态信息, 能够理解人类的较复杂的抽象指令, 良好的上下文代码的生成能力
-
-
-##############################################################
-#                           EASY                             #
-##############################################################
-
 # 1. 移动到deliver_space
 Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
@@ -142,98 +128,12 @@ Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver",
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Move 50 and 40mm to the right and rear respectively.
 
-
-
-
-##############################################################
-#                          MIDDLE                            #
-##############################################################
-
-# 1. 移动到tool_space, 然后拿起十字螺丝刀
+# 27. 停止机器人运动并移动到deliver_space
 Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
-Human[language]: Please move to the tool space and then grasp phillips screwdriver.
+Human[language]: Stop and back to deliver_space.
 
-# 2. 移动到tool_space, 然后拿起一字螺丝刀
+# 28. 告诉我你抓取的物体是什么
 Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
-Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
-Human[language]: Please move to the tool space and then grasp slotted screwdriver.
-
-# 3. 移动到tool_space, 然后拿起六角螺丝刀
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
-Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "None"]
-Human[language]: Please move to the tool space and then grasp hex screwdriver.
-
-# 4. 移动到part_space, 然后拿起battery
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
-Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "None"]
-Human[language]: Please move to the tool space and then grasp hex screwdriver.
-
-
-
-
-
-
-
-
-
-
-
-# 2. 移动到tool_space, 然后拿起锤子 (没有这个tool, 返回question)
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
-Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
-Human[language]: Please move to the tool space and then grasp phillips screwdriver.
-
-# 13. 告诉我phillips screwdriver的坐标
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
-Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
-Human[language]: Move to the part space and then tool space.
-
-
-
-
-
-
-
-
-##############################################################
-#                           HARD                             #
-##############################################################
-
-# 移动到你便于抓取零件的space
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# 根据人类动作，递送工具的任务
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "tree stringers", "signal interface board"]; assembly_space: ["framework"]]
-Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
-Human[action]: I pick up a cross screw, pass me the appropriate tools.
-
-# 人类伸手，机器人松开工具
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver"]; part_space: ["battery", "tree stringers", "signal interface board"]; assembly_space: ["framework"]]
-Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "hex screwdriver"]
-Human[action]: I reach out my hand for tools/parts in the gripper.
-
-# 根据人类简单语言，移动零件至装配处的任务
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
-Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
-Human[language]: Please install the stringer to the location where my finger is pointing.
-
-# 根据人类清晰语言，移动零件至装配处的任务
-Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
-Human[language]: Please stringer the stringer and install it to the location where my finger is pointing.
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "battery"]
+Human[language]: Tell me what you are grasping.

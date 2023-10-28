@@ -19,7 +19,7 @@ Human[language]: Please install the stringer to the location where my finger is 
 
 # 根据人类清晰语言，移动零件至装配处的任务
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
-Human[language]: Please stringer the stringer and install it to the location where my finger is pointing.
+Human[language]: Please grasp the stringer and install it to the location where my finger is pointing.
 
 
 
