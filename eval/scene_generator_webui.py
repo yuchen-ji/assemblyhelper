@@ -24,7 +24,7 @@ class CodeGenerator:
         通过file或者str初始化llm的prompt, file的优先级高
         """
 
-        robot_role = "You need to act as a desktop robotic arm with 6 degrees of freedom, and the end effector is a gripper. You need to understand my actions/language and assist me in completing the assembly of the parts."
+        robot_role = "You are a desktop robotic arm with 6 degrees of freedom and a gripper end effector. You need to understand my actions/language and assist me in completing the assembly of the parts."
         scene_role = "You should act as an scene detector used to detect new scene observations after a desktop robot completes its actions."
         valid_role = "You need to act as a validator and answer the validation questions based on given robot code."
 
@@ -94,10 +94,10 @@ class CodeGenerator:
 # codeg = CodeGenerator(role="robot",file_path="eval/prompts/robot_prompt_update9.yml", model="gpt-3.5-turbo", oncecall=True)
 # codeg = CodeGenerator(role="robot",file_path="eval/prompts/robot_prompt_update9.yml", model="gpt-4-0613", oncecall=True)
 
-codeg = CodeGenerator(role="valid", file_path="eval/prompts/validation_prompt.yml", model="gpt-3.5-turbo", oncecall=True)
+# codeg = CodeGenerator(role="valid", file_path="eval/prompts/validation_prompt.yml", model="gpt-3.5-turbo", oncecall=True)
 # codeg = CodeGenerator(role="valid", file_path="eval/prompts/validation_prompt.yml", model="gpt-4-0613", oncecall=True)
 
-# codeg = CodeGenerator()
+codeg = CodeGenerator()
 
 
 def answer(question, history=[]):
@@ -110,14 +110,13 @@ def answer(question, history=[]):
 
 
 with gr.Blocks() as demo:
-    chatbot = gr.Chatbot(elem_id="chatbot", label="Assembly Helper", height=800)
+    chatbot = gr.Chatbot(elem_id="chatbot", label="Assembly Helper")
     state = gr.State([])
     with gr.Row():
         txt = gr.Textbox(
             show_label=False,
             placeholder="Please input you action/language instrutions.",
-            container=False,
-        )
+        ).style(container=False)
     with gr.Column(scale=16, min_width=0):
         clear = gr.Button("Clear")
 

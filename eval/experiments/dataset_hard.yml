@@ -1,0 +1,79 @@
+# 1. 人类拿起十字螺钉，机器人递送工具的任务
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[action]: I pick up a cross screw, pass me the appropriate tools.
+
+# 2. 人类拿起一字螺钉，机器人递送工具的任务
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[action]: I pick up a slotted screw, pass me the appropriate tools.
+
+# 3. 人类拿起六角螺钉，机器人递送工具的任务
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[action]: I pick up a hexagonal screw, pass me the appropriate tools.
+
+# 4. 人类伸出手拿取phillips screwdriver，机器人松开夹具
+Space[observation]: [tool_space: ["slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "phillips screwdriver"]
+Human[action]: I reached out to retrieve the object from your gripper.
+
+# 5. 人类伸出手递送slotted screwdriver，机器人关闭夹具
+Space[observation]: [tool_space: ["phillips screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[action]: I reached out and handed the object to your gripper.
+
+# 6. 人类伸出手拿取signal interface board，机器人松开夹具
+Space[observation]: [tool_space: ["phillips screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "signal interface board"]
+Human[action]: I reached out to retrieve the object from your gripper.
+
+# 7. 将battery移动到我手指的位置
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "battery"]
+Human[language]: Please move the battery to the location where my finger is pointing.
+
+# 8. 将stringer移动到我手指的位置（在gripper中）
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "three stringers", "signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "stringer"]
+Human[language]: Please move the stringer to the location where my finger is pointing.
+
+# 9. 将stringer移动到我手指的位置（不在gripper）
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[language]: Please install the stringer to the location where my finger is pointing.
+
+# 10. 将battery移动到我手指的位置（详细的指令）
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[language]: Please grasp the battery in the part space and install it to the location where my finger is pointing.
+
+# 11. 将signal interface board移动到我手指的位置（详细的指令）
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[language]: Please grasp the signal interface board in the part space and install it to the location where my finger is pointing.
+
+# 12. 将stringer移动到我手指的位置（详细的指令）
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[language]: Please first get the assembly location where my finger is pointing and then move the stringer to that location.
+
+# 13. 将stringer移动到我手指的位置（在gripper中, 告诉它何时调整速度）
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "three stringers", "signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "stringer"]
+Human[language]: Please move the stringer to the location where my finger is pointing, use a lower speed when grasping or installing parts.
+
+# 14. 将stringer移动到我手指的位置（不在gripper, 告诉它何时调整速度）
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[language]: Please install the stringer to the location where my finger is pointing, use a lower speed when grasping or installing parts.
+
+# 15. 将stringer移动到我手指的位置（在gripper中, 让它自动调整速度）
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "three stringers", "signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "stringer"]
+Human[language]: Please move the stringer to the location where my finger is pointing and adjust the speed adaptively.
+
+# 16. 将stringer移动到我手指的位置（不在gripper, 让它自动调整速度）
+Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[language]: Please install the stringer to the location where my finger is pointing and adjust the speed adaptively.

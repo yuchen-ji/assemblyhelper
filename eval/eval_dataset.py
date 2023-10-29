@@ -90,8 +90,8 @@ class CodeGenerator:
         self.get_llm_response(user_input=self.preprompt)
 
 
-def read_dataset(filename, interval=5):
-    with open(filename, 'r') as file:
+def read_dataset(dataset_path, interval=5):
+    with open(dataset_path, 'r') as file:
         lines = file.readlines()
     
     tasks = []
@@ -113,21 +113,22 @@ def read_dataset(filename, interval=5):
 if __name__ == '__main__':   
     
     interval = 5
-    filename = 'eval/prompts/dataset_easy.yml'
-    prompt_path = "eval/prompts/robot_prompt_update8.yml"
+    dataset_path = 'eval/experiments/dataset_hard.yml'
+    prompt_path = "eval/experiments/prompts/direct.yml"
+    result_path = 'eval/experiments/gpt35_direct.yml'
 
-    tasks, tasks_name = read_dataset(filename, interval)
+    tasks, tasks_name = read_dataset(dataset_path, interval)
     print(tasks[1])
     
     codeg = CodeGenerator(role="robot",file_path=prompt_path, model="gpt-3.5-turbo", oncecall=True)
     
-    for task, task_name in zip(tasks[:2], tasks_name[:2]):    
+    for task, task_name in zip(tasks[:], tasks_name[:]):    
         result = task_name
         answer = codeg.get_llm_response(task)
         answer = re.sub(r'\n\s*\n', '\n', answer)
         
-        result += task + answer + '\n'
-        with open("eval/experiments/results.yml", "a") as f:
+        result += task + answer + '\n' + '\n'
+        with open(result_path, "a") as f:
             f.write(result)
             
         codeg.clear_history()
