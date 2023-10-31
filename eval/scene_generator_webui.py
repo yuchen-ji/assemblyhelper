@@ -1,10 +1,11 @@
+import re
 import os
 import copy
 import openai
 import gradio as gr
 
-# os.environ["http_proxy"] = "http://127.0.0.1:7890"
-# os.environ["https_proxy"] = "http://127.0.0.1:7890"
+os.environ["http_proxy"] = "http://127.0.0.1:7890"
+os.environ["https_proxy"] = "http://127.0.0.1:7890"
 openai.api_base = "https://api.ai-yyds.com/v1"
 openai.api_key = os.getenv(
     "OPENAI_KEY", default="sk-GM3AyFSCFHwbJdnC4c1a2637E4Bf4433AcFcAc8c3e976cFe"
@@ -91,18 +92,26 @@ class CodeGenerator:
 # codeg = CodeGenerator(role="scene",file_path="src/workspaces/scene_description_prompt.yml", model="gpt-3.5-turbo", oncecall=True)
 # codeg = CodeGenerator(role="scene",file_path="src/workspaces/scene_description_prompt.yml", model="gpt-4-0613", oncecall=True)
 
-# codeg = CodeGenerator(role="robot",file_path="eval/prompts/robot_prompt_update9.yml", model="gpt-3.5-turbo", oncecall=True)
-# codeg = CodeGenerator(role="robot",file_path="eval/prompts/robot_prompt_update9.yml", model="gpt-4-0613", oncecall=True)
+# codeg = CodeGenerator(role="robot",file_path="eval/experiments/prompts/cot_1shot_comment.yml", model="gpt-3.5-turbo", oncecall=True)
+codeg = CodeGenerator(role="robot",file_path="eval/experiments/prompts/cot_1shot_comment.yml", model="gpt-4-0613", oncecall=True)
 
 # codeg = CodeGenerator(role="valid", file_path="eval/prompts/validation_prompt.yml", model="gpt-3.5-turbo", oncecall=True)
 # codeg = CodeGenerator(role="valid", file_path="eval/prompts/validation_prompt.yml", model="gpt-4-0613", oncecall=True)
 
-codeg = CodeGenerator()
+# codeg = CodeGenerator()
+ 
+def write_to_file(question, answer):
+    result = ""
+    answer = re.sub(r'\n\s*\n', '\n', answer)
+    result += question + answer + '\n' + '\n'
+    with open("eval/experiments/feedback/gpt4_feedback.yml", "a") as f:
+        f.write(result)
 
 
 def answer(question, history=[]):
     history.append(question)
     message = codeg.get_llm_response(question)
+    write_to_file(question, message)
     history.append(message)
     responses = [(u, b) for u, b in zip(history[::2], history[1::2])]
     # print(responses)
@@ -110,13 +119,14 @@ def answer(question, history=[]):
 
 
 with gr.Blocks() as demo:
-    chatbot = gr.Chatbot(elem_id="chatbot", label="Assembly Helper")
+    chatbot = gr.Chatbot(elem_id="chatbot", label="Assembly Helper", height=800)
     state = gr.State([])
     with gr.Row():
         txt = gr.Textbox(
             show_label=False,
             placeholder="Please input you action/language instrutions.",
-        ).style(container=False)
+            container=False
+        )
     with gr.Column(scale=16, min_width=0):
         clear = gr.Button("Clear")
 
@@ -126,4 +136,4 @@ with gr.Blocks() as demo:
     clear.click(lambda: [], None, chatbot)
     clear.click(lambda: [], None, state)
 
-demo.launch(height=800)
+demo.launch()

@@ -1,139 +1,139 @@
 # 1. 移动到deliver_space
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Please move to the deliver space.
 
 # 2. 移动到part_space
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Go to the part space.
 
 # 3. 移动到tool_space
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Move your gripper to the tool space.
 
 # 4. 移动到assembly_space
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Go to the ssembly space.
 
 # 5. 打开夹具
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Open the gripper.
 
 # 6. 关闭夹具
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Close your gripper.
 
 # 7. 检查夹具开合状态
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Let me know the gripper is open or close.
 
 # 8. 检查夹具所在位置
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Let me know the space the gripper located.
 
 # 9. 检查夹具的坐标
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Let me know the specific 6D pose you located.
 
 # 10. 检查夹具的坐标
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Let me know the specific 6D pose you located.
 
 # 11. 移动到tool_space然后关闭夹具
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Move to the tool space and close the gripper.
 
 # 12. 移动到part_space然后移动到tool_space
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Move to the part space and then tool space.
 
 # 13. 将速度设置为50%
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Please set the speed to 50%.
 
 # 14. 提高速度
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Please increase your speed.
 
 # 15. 降低速度
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Please decrease your speed.
 
 # 16. 告诉我你现在的速度是多少
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Let me know your speed.
 
 # 17. 向前移动10mm
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Please move forward by 10 mm.
 
 # 18. 向后移动20mm
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Please move backward by 20 mm.
 
 # 19. 向上移动30mm
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Please move up by 30 mm.
 
 # 20. 向下移动40mm
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Please move down by 40 mm.
 
 # 21. 向左移动一点
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Please move to the left a little.
 
 # 22. 向右移动一点
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Please move to the right a little.
 
 # 23. 向左前方移动一点
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Please move a little to the left and forward.
 
 # 24. 向右前方移动一点
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Please move a little to the right and forward.
 
 # 25. 向左后方移动30mm
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Please move 30mm to the left rear.
 
 # 26. 向右后方分别移动50，40mm
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Move 50 and 40mm to the right and rear respectively.
 
 # 27. 停止机器人运动并移动到deliver_space
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Human[language]: Stop and back to deliver_space.
 
 # 28. 告诉我你抓取的物体是什么
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "battery"]
 Human[language]: Tell me what you are grasping.

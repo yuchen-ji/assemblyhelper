@@ -5,8 +5,8 @@ import yaml
 import openai
 import gradio as gr
 
-# os.environ["http_proxy"] = "http://127.0.0.1:7890"
-# os.environ["https_proxy"] = "http://127.0.0.1:7890"
+os.environ["http_proxy"] = "http://127.0.0.1:7890"
+os.environ["https_proxy"] = "http://127.0.0.1:7890"
 openai.api_base = "https://api.ai-yyds.com/v1"
 openai.api_key = os.getenv(
     "OPENAI_KEY", default="sk-GM3AyFSCFHwbJdnC4c1a2637E4Bf4433AcFcAc8c3e976cFe"
@@ -114,13 +114,14 @@ if __name__ == '__main__':
     
     interval = 5
     dataset_path = 'eval/experiments/dataset_hard.yml'
-    prompt_path = "eval/experiments/prompts/direct.yml"
-    result_path = 'eval/experiments/gpt35_direct.yml'
+    prompt_path = "eval/experiments/prompts/cot_1shot_comment.yml"
+    result_path = 'eval/experiments/feedback/gpt4_origin.yml'
 
     tasks, tasks_name = read_dataset(dataset_path, interval)
     print(tasks[1])
     
-    codeg = CodeGenerator(role="robot",file_path=prompt_path, model="gpt-3.5-turbo", oncecall=True)
+    # codeg = CodeGenerator(role="robot",file_path=prompt_path, model="gpt-3.5-turbo", oncecall=True)
+    codeg = CodeGenerator(role="robot",file_path=prompt_path, model="gpt-4-0613", oncecall=True)
     
     for task, task_name in zip(tasks[:], tasks_name[:]):    
         result = task_name
@@ -133,6 +134,10 @@ if __name__ == '__main__':
             
         codeg.clear_history()
     
+
+    # easy_35 = [2, 9, 12, 14, 15, 18, 23, 25]
+    # middle_35 = [12, 13, 15, 16, 17, 19, 20, 21, 22, 24]
+    # hard_35 = [1, 2, 3, 4, 5, 7, 8, 9, 12, 13, 14, 15, 16]
     
     
     
