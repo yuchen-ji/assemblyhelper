@@ -31,11 +31,11 @@ All your outputs need to meet the following format:
 
 Space and Sensor:
 - Space[observation]: [tool_space: ["object list in the tool_space"]; part_space: ["object list in the tool_space"]; assembly_space: ["object list in the tool_space"]]
-- Robot[sensor]: [location: "the space where the gripper is located": "open/closed"; grasped: "None"]
+- Robot[sensor]: [location: "deliver_space/part_space/tool_space/assembly_space/other_location": "open/closed"; grasped: "None"; speed: "from 0.0 to 1.0"]
 
 Here are some examples of human action/language intentions and the code you responded to:
 Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
-Sensor[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Sensor[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
 Human[language]: Please grasp the stringer.
 Robot[thought]: I notice the stringer is in the part_space and i am in the deliver_space with gripper open. So, I need to move to the part_space; get the location of stringer; grasp the stringer and avoid collisions.
 Robot[question]: None.

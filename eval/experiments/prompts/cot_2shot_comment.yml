@@ -31,12 +31,12 @@ All your outputs need to meet the following format:
 
 Space and Sensor:
 - Space[observation]: [tool_space: ["object list in the tool_space"]; part_space: ["object list in the tool_space"]; assembly_space: ["object list in the tool_space"]]
-- Robot[sensor]: [location: "the space where the gripper is located": "open/closed"; grasped: "None"]
+- Robot[sensor]: [location: "deliver_space/part_space/tool_space/assembly_space/other_location": "open/closed"; grasped: "None"; speed: "from 0.0 to 1.0"]
 
 Here are some examples of human action/language intentions and the code you responded to:
 # EXAMPLE 1
 Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
-Sensor[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Sensor[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None", speed: "0.5"]
 Human[language]: Please bring me the phillips screwdriver.
 
 Robot[thought]: I notice the phillips screwdriver is in the tool_space and i am in the deliver_space with gripper open. So, I need to move to the tool_space; get the location of phillips screwdriver; grasp the phillips screwdriver avoiding collisions; move it to the deliver_space waitting human to take.
@@ -65,7 +65,7 @@ move_to_location("deliver_space")
 
 # EXAMPLE 2
 Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "three stringers", "one signal interface board"]; assembly_space: ["framework"]]
-Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None", speed: "0.5"]
 Human[language]: Tell me the XYZ coordinates of your gripper.
 
 Robot[thought]: The human ask for the XYZ coordinates of my gripper. So, i need to use get my current location; select only XYZ coordinates; respond it to human. 
@@ -76,26 +76,7 @@ current_loc = get_current_location()
 # Step 2: Select XYZ coordinates of location.
 xyz_coord = [current_loc[0], current_loc[1], current_loc[2]]
 # Step 3: Respond the XYZ coordinates to the human.
-respond_info_to_human("The XYZ coordinates of my gripper is: str(xyz_coord)")
-
-
-# EXAMPLE 3
-Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "three stringers", "one signal interface board"]; assembly_space: ["framework"]]
-Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "stringer"]
-Human[language]: Please install the stringer in the location where my finger is pointing.
-
-Robot[thought]: I notice that I am currently holding a stringer and I am in the deliver_space. The human wants me to install the stringer in the location where his finger is pointing with suitable speed. I need to lower the speed when grasping or installing parts. So, I need to set a lower speed when move xxxx, get the location where the human's finger is pointing in the assembly_space, and move the stringer to that location.
-Robot[question]: None.
-Robot[code]:
-# Step 1: move to the assembly_space to prepare for getting assembly scene description.
-move_to_location("assembly_space")
-# Step 2: get assembly_space description.
-assembly_space_des=get_scene_descriptions()
-# Step 3: get the location where the human's finger is pointing.
-assembly_trajs = get_pointed_assembly_location(assembly_space_des)
-# Step 4: I am currently holding a stringer. So, i don't need to grasp stringer in part_space again. Do nothing.
-# Step 5: move to the location where the human's finger is pointing.
-move_to_location_by_trajectory(assembly_trajs)
+respond_info_to_human("The XYZ coordinates of my gripper is: " + str(xyz_coord)))
 
 
 You need to first understand my intention from Human[action/language], then get the information of scene observation from Space[observation] and robot sensor from Robot[sensor].

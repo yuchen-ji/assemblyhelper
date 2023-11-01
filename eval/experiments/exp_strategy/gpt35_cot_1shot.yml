@@ -111,20 +111,20 @@ Robot[code]:
 set_speed(0.5)
 
 # 14. 提高速度
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
-Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None", speed: "0.5"]
 Human[language]: Please increase your speed.
-Robot[thought]: The human wants me to increase my speed. I need to set my speed to a higher rate.
-Robot[code]:
-set_speed(high_rate)
+Robot[thought]: The human wants me to increase my speed. I need to adjust my speed to the desired rate.
+Robot[question]: What speed rate would you like me to set?
 
 # 15. 降低速度
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
-Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None", speed: "0.5"]
 Human[language]: Please decrease your speed.
-Robot[thought]: The human has requested to decrease the robot's speed. I need to set the robot's speed to a lower rate.
+Robot[thought]: I understand that you want me to decrease my speed. Currently, my speed is set to 0.5. To decrease it, I will set the speed to a lower value.
+Robot[question]: None.
 Robot[code]:
-set_speed(0.5)
+set_speed(0.3)
 
 # 16. 告诉我你现在的速度是多少
 Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]

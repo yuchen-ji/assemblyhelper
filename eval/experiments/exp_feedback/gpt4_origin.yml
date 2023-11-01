@@ -673,7 +673,7 @@ move_to_location("tool_space")
 # Step 2: get tool_space description
 tool_space_des = get_scene_descriptions()
 # Step 3: get the storage location of each tool and inform the human
-for tool in ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]:
+for tool in ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]:
     tool_loc = get_storage_location(tool_space_des, tool)
     respond_info_to_human(f"The 6D pose of {tool} is {tool_loc}")
 
@@ -1152,13 +1152,13 @@ move_to_location(safe_assembly_loc)
 
 # 14. 将stringer移动到我手指的位置（不在gripper, 告诉它何时调整速度）
 Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
-Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None", speed: "0.5"]
 Human[language]: Please install the stringer in the location where my finger is pointing, use a lower speed when grasping or installing parts.
 Robot[thought]: I understand that I need to grasp the stringer from the part_space, move it to the location where the human finger is pointing in the assembly_space, and install it there. I also need to adjust my speed to a lower rate when grasping or installing parts.
 Robot[question]: None.
 Robot[code]:
 # Step 1: Set the robot's speed to a lower rate
-set_speed("lower")
+set_speed(0.3)
 # Step 2: Move to the "part_space" to prepare for getting parts' scene description
 move_to_location("part_space")
 # Step 3: Get part_space description

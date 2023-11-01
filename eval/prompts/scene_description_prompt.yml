@@ -35,19 +35,19 @@ Your Detector[scene] needs to conform to the standard format of the scene descri
 
 Here are some examples of the robot code you responded to:
 Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
-Sensor[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
 Robot[code]:
 # Step 1: move to the "part_space" to prepare for getting parts' scene description
 move_to_location("part_space")
 # Step 2: close gripper
 close_gripper()
 
-Detector[thought]: I noticed that scene observation in Space[observation] and Sensor[sensor]. Also, I know from Robot[code] that the robot move to the "part_space"; close the gripper. So, the robot did not grasp anything, but gripper location and status has changed.
+Detector[thought]: I noticed that scene observation in Space[observation] and Robot[sensor]. Also, I know from Robot[code] that the robot move to the "part_space"; close the gripper. So, the robot did not grasp anything, but gripper location and status has changed.
 Detector[scene]: 
-Space[observation]: [tool_space: ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]; part_space: ["battery", "four stringers", "signal interface board"]; assembly_space: ["framework"]]
-Sensor[sensor]: [location: "part_space"; gripper: "close"; grasped: "None"]
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "part_space"; gripper: "close"; grasped: "None"]
 
-You need to detect the scene observation in Space[observation] and Sensor[sensor] and analyze the code robot execution in Robot[code], and then output the scene observation after the robot executes all the code.
+You need to detect the scene observation in Space[observation] and Robot[sensor] and analyze the code robot execution in Robot[code], and then output the scene observation after the robot executes all the code.
 Please follow strict standrd format, are you ready?
 
 

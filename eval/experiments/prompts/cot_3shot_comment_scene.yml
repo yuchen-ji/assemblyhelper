@@ -24,16 +24,19 @@ Robot APIs:
 - get_pointed_assembly_location(space_des): Input the space description. Returns a 6D poses trajectory sequence that moves to the assembly position of the finger.
 - respond_info_to_human(info): Inform humans of any information input.
 
-All your outputs need to meet the following format:
-- Robot[thought]: Explain the main step you need to take.
-- Robot[question]: Only when you think my instruction is wrong, ask me questions.
-- Robot[code]: Output code comments and code command that achieves the desired goal. You can only access the Robot APIs, but other hypothetical APIs are not allowed.
-
 Space and Sensor:
 - Space[observation]: [tool_space: ["object list in the tool_space"]; part_space: ["object list in the tool_space"]; assembly_space: ["object list in the tool_space"]]
 - Robot[sensor]: [location: "deliver_space/part_space/tool_space/assembly_space/other_location": "open/closed"; grasped: "None"; speed: "from 0.0 to 1.0"]
 
+All your outputs need to meet the following format:
+- Robot[thought]: Explain the main step you need to take.
+- Robot[question]: Only when you think my instruction is wrong, ask me questions.
+- Robot[code]: Output code comments and code command that achieves the desired goal. You can only access the Robot APIs, but other hypothetical APIs are not allowed.
+- Space[observation-update]: The new space observation after executing robot code, the format must be consistent with Space[observation]. 
+- Robot[sensor-update]: The new robot sensor after executing robot code, the format must be consistent with Robot[sensor]. 
+
 Here are some examples of human action/language intentions and the code you responded to:
+
 # EXAMPLE 1
 Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
 Sensor[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None", speed: "0.5"]
@@ -55,13 +58,14 @@ move_to_location(safe_tool_loc)
 # Step 6: The gripper is already open. Do nothing.
 # Step 7: move to the location of the phillips screwdriver.
 move_to_location(tool_loc)
-# Step 8: close the gripper to grasp the phillips screwdriver.
+# Step 8: close the gripper and grasp the phillips screwdriver.
 close_gripper()
 # Step 9: move to the safe location.
 move_to_location(safe_tool_loc)
 # Step 10: move to the deliver_space waitting human to take.
 move_to_location("deliver_space")
-
+Space[observation-update]: [tool_space: ["one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "three stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor-update]: [location: "deliver_space"; gripper: "close"; grasped: "phillips screwdriver", speed: "0.5"]
 
 # EXAMPLE 2
 Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "three stringers", "one signal interface board"]; assembly_space: ["framework"]]
@@ -77,11 +81,13 @@ current_loc = get_current_location()
 xyz_coord = [current_loc[0], current_loc[1], current_loc[2]]
 # Step 3: Respond the XYZ coordinates to the human.
 respond_info_to_human("The XYZ coordinates of my gripper is: " + str(xyz_coord))
+Space[observation-update]: [tool_space: ["one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "three stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor-update]: [location: "deliver_space"; gripper: "open"; grasped: "None", speed: "0.5"]
 
 
 # EXAMPLE 3
 Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "three stringers", "one signal interface board"]; assembly_space: ["framework"]]
-Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "stringer", speed: "0.5"]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "stringer"]
 Human[language]: Please install the stringer in the location where my finger is pointing, and adjust the speed adaptively.
 
 Robot[thought]: I notice that I am currently holding a stringer and I am in the deliver_space. The human wants me to install the stringer in the location where his finger is pointing with suitable speed. I need to lower the speed when grasping or installing parts. So, I need to set a lower speed when i grasp or install objects, get the location where the human's finger is pointing in the assembly_space, and move the stringer to that location.
@@ -98,11 +104,14 @@ assembly_trajs = get_pointed_assembly_location(assembly_space_des)
 set_speed(0.25)
 # Step 6: move to the location where the human's finger is pointing.
 move_to_location_by_trajectory(assembly_trajs)
+Space[observation-update]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "three stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor-update]: [location: "other_location"; gripper: "close"; grasped: "stringer", speed: "0.25"]
 
 
 You need to first understand my intention from Human[action/language], then get the information of scene observation from Space[observation] and robot sensor from Robot[sensor].
 Based on these information, you can generate robot control code. 
 You need to Explain the main step you need to take in Robot[thought] and output code in Robot[code] with comments before each line of code.
 Only when you think my instruction is wrong, ask me questions in Robot[question]. 
-Whether you ask a question or not, you must output code in Robot[code].
+Regardless you ask a question or not, you must output code in Robot[code].
+Finally, you need to detect information in Space[observation] and Robot[sensor] and analyze the code robot execution in Robot[code], and then output the new Space[observation] and Robot[sensor] after the robot executes all the code.
 Are you ready? 

@@ -1,0 +1,321 @@
+# 1. 移动到tool_space, 然后拿起十字螺丝刀
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Robot[code]:
+# Step 1: move to the "tool_space" to prepare for getting tools' scene description
+move_to_location("tool_space")
+# Step 2: get tool_space description
+tool_space_des = get_scene_descriptions()
+# Step 3: get the storage location of phillips screwdriver
+tool_loc = get_storage_location(tool_space_des, "phillips screwdriver")
+# Step 4: get the safe location near the phillips screwdriver, that avoiding collisions.
+safe_tool_loc = get_safe_location("phillips screwdriver", tool_loc)
+# Step 5: move to the safe location
+move_to_location(safe_tool_loc)
+# Step 6: open the gripper
+open_gripper()
+# Step 7: move to the location of the phillips screwdriver
+move_to_location(tool_loc)
+# Step 8: close the gripper to grasp the phillips screwdriver
+close_gripper()
+# Step 9: move to the safe location
+move_to_location(safe_tool_loc)
+
+
+# 2. 移动到tool_space, 然后拿起一字螺丝刀
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "None"; speed: "0.5"]
+Robot[code]:
+# Step 1: move to the "tool_space" to prepare for getting tools' scene description
+move_to_location("tool_space")
+# Step 2: get tool_space description
+tool_space_des = get_scene_descriptions()
+# Step 3: get the storage location of slotted screwdriver
+tool_loc = get_storage_location(tool_space_des, "slotted screwdriver")
+# Step 4: get the safe location near the slotted screwdriver, that avoiding collisions.
+safe_tool_loc = get_safe_location("slotted screwdriver", tool_loc)
+# Step 5: move to the safe location
+move_to_location(safe_tool_loc)
+# Step 6: open the gripper
+open_gripper()
+# Step 7: move to the location of the slotted screwdriver
+move_to_location(tool_loc)
+# Step 8: close the gripper to grasp the slotted screwdriver
+close_gripper()
+# Step 9: move to the safe location
+move_to_location(safe_tool_loc)
+
+
+# 3. 移动到tool_space, 然后拿起六角螺丝刀
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "part_space"; gripper: "close"; grasped: "None"; speed: "0.5"]
+Robot[code]:
+# Step 1: move to the "tool_space" to prepare for getting tools' scene description
+move_to_location("tool_space")
+# Step 2: get tool_space description
+tool_space_des = get_scene_descriptions()
+# Step 3: get the storage location of hex screwdriver
+tool_loc = get_storage_location(tool_space_des, "hex screwdriver")
+# Step 4: get the safe location near the hex screwdriver, that avoiding collisions.
+safe_tool_loc = get_safe_location("hex screwdriver", tool_loc)
+# Step 5: move to the safe location
+move_to_location(safe_tool_loc)
+# Step 6: open the gripper
+open_gripper()
+# Step 7: move to the location of the hex screwdriver
+move_to_location(tool_loc)
+# Step 8: close the gripper to grasp the hex screwdriver
+close_gripper()
+# Step 9: move to the safe location
+move_to_location(safe_tool_loc)
+
+
+# 4. 移动到part_space, 然后拿起battery
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Robot[code]:
+# Step 1: move to the "part_space" to prepare for getting tools' scene description
+move_to_location("part_space")
+# Step 2: get part_space description
+part_space_des=get_scene_descriptions()
+# Step 3: get the storage location of battery
+part_loc=get_storage_location(part_space_des, "battery")
+# Step 4: get the safe location near the battery, that avoiding collisions.
+safe_part_loc= get_safe_location("battery", part_loc)
+# Step 5: move to the safe location
+move_to_location(safe_part_loc)
+# Step 6: open the gripper
+open_gripper()
+# Step 7: move to the location of the battery
+move_to_location(part_loc)
+# Step 8: close the gripper to grasp the battery
+close_gripper()
+# Step 9: move to the safe location
+move_to_location(safe_part_loc)
+
+
+# 5. 移动到part_space, 然后拿起stringer
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "None"; speed: "0.5"]
+Robot[code]:
+# Assuming the human instruction was a mistake and they meant part_space
+# Step 1: move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: get part_space description
+part_space_des=get_scene_descriptions()
+# Step 3: get the storage location of stringer
+part_loc=get_storage_location(part_space_des, "stringer")
+# Step 4: get the safe location near the stringer, that avoiding collisions.
+safe_part_loc= get_safe_location("stringer", part_loc)
+# Step 5: move to the safe location
+move_to_location(safe_part_loc)
+# Step 6: open the gripper
+open_gripper()
+# Step 7: move to the location of the stringer
+move_to_location(part_loc)
+# Step 8: close the gripper to grasp the stringer
+close_gripper()
+# Step 9: move to the safe location
+move_to_location(safe_part_loc)
+
+
+# 6. 拿起signal interface board
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "part_space"; gripper: "close"; grasped: "None"; speed: "0.5"]
+Robot[code]:
+# Step 1: Move to the "part_space" to prepare for getting part_space description
+move_to_location("part_space")
+# Step 2: Get part_space description
+part_space_des = get_scene_descriptions()
+# Step 3: Get the storage location of the signal interface board
+part_loc = get_storage_location(part_space_des, "signal interface board")
+# Step 4: Get the safe location near the signal interface board, avoiding collisions
+safe_part_loc = get_safe_location("signal interface board", part_loc)
+# Step 5: Move to the safe location
+move_to_location(safe_part_loc)
+# Step 6: Open the gripper
+open_gripper()
+# Step 7: Move to the location of the signal interface board
+move_to_location(part_loc)
+# Step 8: Close the gripper to grasp the signal interface board
+close_gripper()
+# Step 9: Move to the safe location
+move_to_location(safe_part_loc)
+
+
+# 7. 拿起battery, 然后移动到deliver_space
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Robot[code]:
+# Step 1: Move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: Get part_space description
+part_space_des = get_scene_descriptions()
+# Step 3: Get the storage location of the battery
+battery_loc = get_storage_location(part_space_des, "battery")
+# Step 4: Get the safe location near the battery, avoiding collisions
+safe_battery_loc = get_safe_location("battery", battery_loc)
+# Step 5: Move to the safe location
+move_to_location(safe_battery_loc)
+# Step 6: Open the gripper
+open_gripper()
+# Step 7: Move to the location of the battery
+move_to_location(battery_loc)
+# Step 8: Close the gripper to grasp the battery
+close_gripper()
+# Step 9: Move to the deliver_space
+move_to_location("deliver_space")
+# Step 10: Open the gripper to release the battery in the deliver_space
+open_gripper()
+
+
+# 8. 拿起stringer, 然后移动到deliver_space
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "None"; speed: "0.5"]
+Robot[code]:
+# Step 1: move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: get part_space description
+part_space_des=get_scene_descriptions()
+# Step 3: get the storage location of stringer
+part_loc=get_storage_location(part_space_des, "stringer")
+# Step 4: get the safe location near the stringer, that avoiding collisions.
+safe_part_loc= get_safe_location("stringer", part_loc)
+# Step 5: move to the safe location
+move_to_location(safe_part_loc)
+# Step 6: open the gripper
+open_gripper()
+# Step 7: move to the location of the stringer
+move_to_location(part_loc)
+# Step 8: close the gripper to grasp the stringer
+close_gripper()
+# Step 9: move back to the safe location
+move_to_location(safe_part_loc)
+# Step 10: move to the deliver_space
+move_to_location("deliver_space")
+
+
+# 9. 拿起signal interface board, 然后移动到deliver_space
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "part_space"; gripper: "close"; grasped: "None"; speed: "0.5"]
+Robot[code]:
+# Step 1: open the gripper
+open_gripper()
+# Step 2: get part_space description
+part_space_des=get_scene_descriptions()
+# Step 3: get the storage location of signal interface board
+part_loc=get_storage_location(part_space_des, "signal interface board")
+# Step 4: get the safe location near the signal interface board, that avoiding collisions.
+safe_part_loc= get_safe_location("signal interface board", part_loc)
+# Step 5: move to the safe location
+move_to_location(safe_part_loc)
+# Step 6: move to the location of the signal interface board
+move_to_location(part_loc)
+# Step 7: close the gripper to grasp the signal interface board
+close_gripper()
+# Step 8: move back to the safe location
+move_to_location(safe_part_loc)
+# Step 9: move to the deliver_space
+move_to_location("deliver_space")
+
+
+# 16. 告诉我phillips screwdriver的位姿
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Robot[code]:
+# Step 1: move to the "tool_space" to prepare for getting tools' scene description
+move_to_location("tool_space")
+# Step 2: get tool_space description
+tool_space_des=get_scene_descriptions()
+# Step 3: get the storage location of phillips screwdriver
+tool_loc=get_storage_location(tool_space_des, "phillips screwdriver")
+# Step 4: inform the human of the 6D pose of the phillips screwdriver
+respond_info_to_human(tool_loc)
+
+
+# 18. 告诉我所有tool的位姿
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Robot[code]:
+# Step 1: move to the "tool_space" to prepare for getting tools' scene description
+move_to_location("tool_space")
+# Step 2: get tool_space description
+tool_space_des = get_scene_descriptions()
+# Step 3: get the storage location of each tool and inform the human
+for tool in ["phillips screwdriver", "slotted screwdriver", "hex screwdriver"]:
+    tool_loc = get_storage_location(tool_space_des, tool)
+    respond_info_to_human(f"The 6D pose of {tool} is {tool_loc}")
+
+
+# 19. 告诉我battery的位姿
+Space[observation]: [tool_space: ["one phillips screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Robot[code]:
+# Step 1: move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: get part_space description
+part_space_des = get_scene_descriptions()
+# Step 3: get the storage location of the battery
+battery_loc = get_storage_location(part_space_des, "battery")
+# Step 4: inform the human about the 6D pose of the battery
+respond_info_to_human(battery_loc)
+
+
+# 20. 告诉我signal interface board和battery的XYZ距离
+Space[observation]: [tool_space: ["one phillips screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Robot[code]:
+# Step 1: move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: get part_space description
+part_space_des=get_scene_descriptions()
+# Step 3: get the storage location of signal interface board
+signal_interface_board_loc=get_storage_location(part_space_des, "signal interface board")
+# Step 4: get the storage location of battery
+battery_loc=get_storage_location(part_space_des, "battery")
+# Step 5: calculate the XYZ distance between signal interface board and battery
+distance = signal_interface_board_loc[:3] - battery_loc[:3]
+# Step 6: inform the human of the calculated distance
+respond_info_to_human("The XYZ distance between signal interface board and battery is: " + str(distance))
+
+
+# 21. 告诉我part_space中的场景观测
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Robot[code]:
+# Step 1: move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: get part_space description
+part_space_des = get_scene_descriptions()
+# Step 3: respond the scene description to human
+respond_info_to_human(part_space_des)
+
+
+# 22. 将battery移动到assembly_space（直接移动battery而不是重新抓取）
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "battery"; speed: "0.5"]
+Robot[code]:
+# Step 1: move to the "assembly_space" to prepare for releasing the battery
+move_to_location("assembly_space")
+# Step 2: open the gripper to release the battery
+open_gripper()
+
+
+# 23. 将stringer移动到assembly_space（直接移动stringer而不是重新抓取）
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "three stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "stringer"; speed: "0.5"]
+Robot[code]:
+# Step 1: Move to the assembly_space
+move_to_location("assembly_space")
+
+
+# 24. 获取我手指向的安装位置的6D位姿
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "None"; speed: "0.5"]
+Robot[code]:
+# Step 1: move to the "assembly_space" to prepare for getting scene description
+move_to_location("assembly_space")
+# Step 2: get assembly_space description
+assembly_space_des = get_scene_descriptions()
+# Step 3: get the location where the human finger is pointing
+finger_pointed_location = get_pointed_assembly_location(assembly_space_des)

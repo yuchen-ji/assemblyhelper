@@ -107,23 +107,44 @@ def read_dataset(dataset_path, interval=5):
             task = ""
     
     return tasks, tasks_name
+
+def read_dataset2(dataset_path, symbol="\n\n"):
+    with open(dataset_path, 'r') as file:
+        content = file.read()
+
+    tasks_ = content.split(symbol)
+    tasks = []
+    tasks_name = []
+    for task_ in tasks_:
+        task_name = task_.split('\n')[0]
+        task = '\n'.join(task_.split('\n')[1:])
+        tasks.append(task)
+        tasks_name.append(task_name)
+
+    return tasks, tasks_name
+
          
          
          
 if __name__ == '__main__':   
     
     interval = 5
-    dataset_path = 'eval/experiments/dataset_hard.yml'
-    prompt_path = "eval/experiments/prompts/cot_1shot_comment.yml"
-    result_path = 'eval/experiments/feedback/gpt4_origin.yml'
+    symbol = '\n\n\n'
+    dataset_path = 'eval/experiments/dataset_middle.yml'
+    prompt_path = "eval/experiments/prompts/cot_3shot_comment_scene.yml"
+    result_path = 'eval/experiments/exp_feedback/gpt4_best_result.yml'
 
     tasks, tasks_name = read_dataset(dataset_path, interval)
+    # tasks, tasks_name = read_dataset2(dataset_path, symbol)
     print(tasks[1])
     
     # codeg = CodeGenerator(role="robot",file_path=prompt_path, model="gpt-3.5-turbo", oncecall=True)
     codeg = CodeGenerator(role="robot",file_path=prompt_path, model="gpt-4-0613", oncecall=True)
     
-    for task, task_name in zip(tasks[:], tasks_name[:]):    
+    # a = [1, 2, 5, 7, 8, 21, 22]
+    # tasks = [t for i, t in enumerate(tasks) if i in a]
+    # tasks_name = [t for i, t in enumerate(tasks_name) if i in a]
+    for task, task_name in zip(tasks[11:], tasks_name[11:]):
         result = task_name
         answer = codeg.get_llm_response(task)
         answer = re.sub(r'\n\s*\n', '\n', answer)
@@ -140,13 +161,7 @@ if __name__ == '__main__':
     # hard_35 = [1, 2, 3, 4, 5, 7, 8, 9, 12, 13, 14, 15, 16]
     
     
-    
-    
-    
-    
-    
-    
-    
+     
     
     
     

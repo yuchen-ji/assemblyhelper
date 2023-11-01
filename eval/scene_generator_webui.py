@@ -93,7 +93,7 @@ class CodeGenerator:
 # codeg = CodeGenerator(role="scene",file_path="src/workspaces/scene_description_prompt.yml", model="gpt-4-0613", oncecall=True)
 
 # codeg = CodeGenerator(role="robot",file_path="eval/experiments/prompts/cot_1shot_comment.yml", model="gpt-3.5-turbo", oncecall=True)
-codeg = CodeGenerator(role="robot",file_path="eval/experiments/prompts/cot_1shot_comment.yml", model="gpt-4-0613", oncecall=True)
+codeg = CodeGenerator(role="robot",file_path="eval/experiments/prompts/cot_3shot_comment_scene.yml", model="gpt-4-0613", oncecall=True)
 
 # codeg = CodeGenerator(role="valid", file_path="eval/prompts/validation_prompt.yml", model="gpt-3.5-turbo", oncecall=True)
 # codeg = CodeGenerator(role="valid", file_path="eval/prompts/validation_prompt.yml", model="gpt-4-0613", oncecall=True)
@@ -104,7 +104,7 @@ def write_to_file(question, answer):
     result = ""
     answer = re.sub(r'\n\s*\n', '\n', answer)
     result += question + answer + '\n' + '\n'
-    with open("eval/experiments/feedback/gpt4_feedback.yml", "a") as f:
+    with open("eval/experiments/exp_feedback/gpt4_best_result.yml", "a") as f:
         f.write(result)
 
 

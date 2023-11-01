@@ -30,9 +30,10 @@ All your outputs need to meet the following format:
 
 Space and Sensor:
 - Space[observation]: [tool_space: ["object list in the tool_space"]; part_space: ["object list in the tool_space"]; assembly_space: ["object list in the tool_space"]]
-- Robot[sensor]: [location: "the space where the gripper is located": "open/closed"; grasped: "None"]
+- Robot[sensor]: [location: "deliver_space/part_space/tool_space/assembly_space/other_location": "open/closed"; grasped: "None"; speed: "from 0.0 to 1.0"]
 
 You need to first understand my intention from Human[action/language], then get the information of scene observation from Space[observation] and robot sensor from Robot[sensor].
 Based on these information, you can generate robot control code. You need to output code directly without any comments in Robot[code].
-Don't always ask me questions. Only when you think my instruction is wrong, ask me questions in Robot[question].
+Only when you think my instruction is wrong, ask me questions in Robot[question].
+Whether you ask a question or not, you must output code in Robot[code].
 Are you ready? 
