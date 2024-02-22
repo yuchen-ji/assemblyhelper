@@ -2,9 +2,11 @@
 
 ## Human-Robot Collaboration Assembly Framework
 ### Overview
+The architecture of the AssemblyHelper includes a perception module, a reasoning module, and an execution module. When performing manufacturing tasks, the workflow of the HRC system is as follow:
+
 <!-- ![](/assets/figures/overview.svg#pic_center) -->
 <div align="center">
-    <img src="https://github.com/yuchen-ji/assemblyhelper/blob/main/assets/figures/overview.svg?sanitize=true" width="80%">
+    <img src="https://github.com/yuchen-ji/assemblyhelper/blob/main/assets/figures/overview.svg?sanitize=true" width="70%">
 </div>
 
 <!-- ### System implement
