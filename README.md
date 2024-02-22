@@ -2,9 +2,10 @@
 
 ## Human-Robot Collaboration Assembly Framework
 ### Overview
-![](/assets/figures/overview.svg#pic_center)
-<img src="https://github.com/yuchen-ji/assemblyhelper/blob/main/assets/figures/overview.svg?sanitize=true" width="80%">
-
+<!-- ![](/assets/figures/overview.svg#pic_center) -->
+<div align="center">
+    <img src="https://github.com/yuchen-ji/assemblyhelper/blob/main/assets/figures/overview.svg?sanitize=true" width="80%">
+</div>
 
 <!-- ### System implement
 ![](/assets/figures/system.svg#pic_center) -->
