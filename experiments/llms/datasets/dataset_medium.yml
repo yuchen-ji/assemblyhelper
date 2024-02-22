@@ -1,0 +1,119 @@
+# 1. move to the tool_space, then pick up the phillips screwdriver
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Please move to the tool space and then grasp phillips screwdriver.
+
+# 2. move to the tool_space, then pick up the slotted screwdriver
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Please move to the tool space and then grasp slotted screwdriver.
+
+# 3. move to the tool_space, then pick up the hex screwdriver
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "part_space"; gripper: "close"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Please move to the tool space and then grasp hex screwdriver.
+
+# 4. move to the part_space, then pick up the battery
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Please move to the part space and then grasp the battery.
+
+# 5. move to the part_space, then pick up the stringer
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Please move to the part space and then grasp stringer.
+
+# 6. move to the part space, then pick up the signal interface board
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "part_space"; gripper: "close"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Please move to the part space and then grasp signal interface board.
+
+# 7. pick up the battery, then move to the deliver_space
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Please move the battery to the deliver space.
+
+# 8. pick up the stringer, then move to the deliver_space
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Please move the stringer to the deliver space.
+
+# 9. pick up the signal interface board, then move to the deliver_space
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "part_space"; gripper: "close"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Please move the signal interface board to the deliver space.
+
+# 10. pick up the phillips screwdriver (Not exist)
+Space[observation]: [tool_space: ["one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Please pick up the phillips screwdriver.
+
+# 11. pick up the slotted screwdriver (Not exist)
+Space[observation]: [tool_space: ["one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Please pick up the slotted screwdriver.
+
+# 12. pick up the hex screwdriver (Not exist)
+Space[observation]: [tool_space: []; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Please pick up the hex screwdriver.
+
+# 13. pick up the battery (Not exist)
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Please pick up the battery.
+
+# 14. pick up the stringer (Not exist)
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Please pick up the stringer.
+
+# 15. pick up the signal interface board (Not exist)
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: []; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Please pick up the signal interface board.
+
+# 16. tell me the 6D pose of phillips screwdriver
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Let me know the 6D pose of phillips screwdriver.
+
+# 17. tell me the 6D pose of slotted screwdriver (Not exist)
+Space[observation]: [tool_space: ["one phillips screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Let me know the 6D pose of slotted screwdriver.
+
+# 18. tell me the 6D pose of all parts
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Let me know the 6D pose of all tools.
+
+# 19. tell me the 6D pose of the battery
+Space[observation]: [tool_space: ["one phillips screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Let me know the 6D pose of the battery.
+
+# 20. tell me the XYZ distance between signal interface board and battery
+Space[observation]: [tool_space: ["one phillips screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Let me know the XYZ distance between signal interface board and battery.
+
+# 21. tell me the observation of part_space
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Let me know the scene description in part space.
+
+# 22. move the battery to the assembly_space (direct moving instead of grasping)
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "battery"; speed: "0.5"]
+Human[instruction]: Please move the battery to the assembly space.
+
+# 23. move the stringer to the assembly_space (direct moving instead of grasping)
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "three stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "stringer"; speed: "0.5"]
+Human[instruction]: Please move the stringer to the assembly space.
+
+# 24. Obtain the 6D pose of assembly location where human's finger pointing
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Get the assembly location where my finger is pointing.

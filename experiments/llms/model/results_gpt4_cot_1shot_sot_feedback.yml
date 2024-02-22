@@ -1,0 +1,718 @@
+################################################################
+#                            EASY                              #
+################################################################
+
+# 7. check the status of gripper
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[instruction]: Let me know the gripper is open or close.
+Robot[thought]: The human wants to know the state of the gripper. I can provide this information directly from the sensor data.
+Robot[question]: None.
+Robot[code]: 
+# Step 1: Respond to human with the gripper state
+respond_info_to_human("The gripper is currently open.")
+
+# 19. move to the left a little
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[instruction]: Please move to the left a little.
+Robot[thought]: The human asked me to move to the left a little. Since I am currently in the "deliver_space", I need to adjust my position to the left within the same space.
+Robot[question]: None.
+Robot[code]:
+# Step 1: Get the current location
+current_location = get_current_location()
+# Step 2: Adjust the Y-axis value of the current location to move to the left
+adjusted_location = (current_location[0], current_location[1] - 0.1, current_location[2], current_location[3], current_location[4], current_location[5])
+# Step 3: Move to the adjusted location
+move_to_location(adjusted_location)
+
+# 20. move to the right a little
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[instruction]: Please move to the right a little.
+Robot[thought]: The human wants me to move to the right a little. Since I'm currently in the deliver_space, I need to calculate a new location slightly to the right of my current position and move there.
+Robot[question]: None.
+Robot[code]:
+# Step 1: Get current location
+current_location = get_current_location()
+# Step 2: Calculate new location slightly to the right
+new_location = current_location
+new_location['y'] += 0.1  # Assuming the unit is meter
+# Step 3: Move to the new location
+move_to_location(new_location)
+# ----------------------------------------------------------------
+Human[instruction]: The return of get current location api is a list not a dict.
+Robot[thought]: The human wants me to move to the right a little. Since I'm currently in the deliver_space, I need to calculate a new location slightly to the right of my current position and move there.
+Robot[question]: None.
+Robot[code]:
+# Step 1: Get current location
+current_location = get_current_location()
+# Step 2: Calculate new location slightly to the right
+new_location = list(current_location)
+new_location[1] += 0.1  # Assuming the unit is meter
+# Step 3: Move to the new location
+move_to_location(new_location)
+
+# 21. move to the [left, forward] a little
+
+
+
+
+################################################################
+#                           MEDIUM                             #
+################################################################
+
+# 20. tell me the XYZ distance between signal interface board and battery
+Space[observation]: [tool_space: ["one phillips screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Let me know the XYZ distance between signal interface board and battery.
+Robot[thought]: I need to move to the part_space to get the scene descriptions. Then, I will calculate the XYZ distance between the signal interface board and the battery.
+Robot[question]: None.
+Robot[code]:
+# Step 1: move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: get part_space description
+part_space_des = get_scene_descriptions()
+# Step 3: get the storage location of signal interface board
+signal_board_loc = get_storage_location(part_space_des, "signal interface board")
+# Step 4: get the storage location of battery
+battery_loc = get_storage_location(part_space_des, "battery")
+# Step 5: calculate the XYZ distance between signal interface board and battery
+distance = abs(signal_board_loc - battery_loc)
+# Step 6: inform the human about the distance
+respond_info_to_human("The XYZ distance between signal interface board and battery is: " + str(distance))
+# ----------------------------------------------------------------
+Human[instruction]: Your output is mostly right. There is a little mistake left that the return value of get_storage_location() is a list of 6D pose, including [x, y, z, rx, ry, rz], while i only need the distances along x, y and z axis.
+Robot[thought]: I understand. I need to adjust my calculation to only consider the XYZ coordinates, not the full 6D pose.
+Robot[question]: None.
+Robot[code]:
+# Step 1: move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: get part_space description
+part_space_des = get_scene_descriptions()
+# Step 3: get the storage location of signal interface board
+signal_board_loc = get_storage_location(part_space_des, "signal interface board")
+# Step 4: get the storage location of battery
+battery_loc = get_storage_location(part_space_des, "battery")
+# Step 5: calculate the XYZ distance between signal interface board and battery
+distance_x = abs(signal_board_loc[0] - battery_loc[0])
+distance_y = abs(signal_board_loc[1] - battery_loc[1])
+distance_z = abs(signal_board_loc[2] - battery_loc[2])
+# Step 6: inform the human about the distance
+respond_info_to_human("The distance between signal interface board and battery is: X-axis: " + str(distance_x) + ", Y-axis: " + str(distance_y) + ", Z-axis: " + str(distance_z))
+
+# 23. move the stringer to the assembly_space (direct moving instead of grasping)
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "three stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "stringer"; speed: "0.5"]
+Human[instruction]: Please move the stringer to the assembly space.
+Robot[thought]: I notice that I am currently in the deliver_space and holding a stringer. I need to move to the assembly_space and release the stringer there.
+Robot[question]: None.
+Robot[code]:
+# Step 1: move to the "assembly_space" to prepare for releasing the stringer
+move_to_location("assembly_space")
+# Step 2: open the gripper to release the stringer
+open_gripper()
+# Step 3: move the gripper upward to avoid collision with the released stringer
+move_to_location([get_current_location()[0], get_current_location()[1], get_current_location()[2]+0.1, get_current_location()[3], get_current_location()[4], get_current_location()[5]])
+# ----------------------------------------------------------------
+Human[instruction]: Mostly you are right. There remains a mistake that do not do any other action that i have not told you, such as open gripper.
+Robot[thought]: I understand. I will move to the assembly_space with the stringer without releasing it.
+Robot[question]: None.
+Robot[code]:
+# Step 1: move to the "assembly_space" with the stringer
+move_to_location("assembly_space")
+
+
+
+
+
+################################################################
+#                            HARD                              #
+################################################################
+
+# 4. Get the object in the robot gripper (phillips screwdriver)
+Space[observation]: [tool_space: ["one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "phillips screwdriver"]
+Human[instruction]: I reached out to retrieve the object from your gripper.
+Robot[thought]: I notice that the human wants to retrieve the object from my gripper. So, I need to move to the deliver_space and open my gripper to release the object.
+Robot[question]: None.
+Robot[code]:
+# Step 1: Check if the robot is already in the deliver_space
+if get_current_location() != "deliver_space":
+    # If not, move to the "deliver_space" to prepare for delivering the object
+    move_to_location("deliver_space")
+# Step 2: Open the gripper to release the object
+open_gripper()
+# ----------------------------------------------------------------
+Human[instruction]: No, you use wrong API. The get_current_location() is just output 6D pose not space name.
+Robot[thought]: I apologize for the confusion. I understand that the human wants to retrieve the object from my gripper. So, I need to move to the deliver_space and open my gripper to release the object.
+Robot[question]: None.
+Robot[code]:
+# Step 1: Move to the "deliver_space" to prepare for delivering the object
+move_to_location("deliver_space")
+# Step 2: Open the gripper to release the object
+open_gripper()
+
+# 7. move the battery to the location where my finger is pointing
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "battery"]
+Human[instruction]: Please move the battery to the location where my finger is pointing.
+Robot[thought]: I understand that I need to move the battery to the location where the human's finger is pointing. This location is in the assembly_space. Currently, I am in the deliver_space and holding a battery. I need to move to the assembly_space, get the location where the human's finger is pointing, and move the battery to that location.
+Robot[question]: None.
+Robot[code]:
+# Step 1: move to the "assembly_space" to prepare for getting scene description
+move_to_location("assembly_space")
+# Step 2: get assembly_space description
+assembly_space_des=get_scene_descriptions()
+# Step 3: get the location where the human's finger is pointing
+pointed_loc=get_pointed_assembly_location(assembly_space_des)
+# Step 4: get the safe location near the pointed location, that avoiding collisions.
+safe_pointed_loc= get_safe_location("battery", pointed_loc)
+# Step 5: move to the safe location
+move_to_location(safe_pointed_loc)
+# Step 6: move to the location where the human's finger is pointing
+move_to_location(pointed_loc)
+# Step 7: open the gripper to release the battery
+open_gripper()
+# Step 8: move to the safe location
+move_to_location(safe_pointed_loc)
+# ------------------------------------------------
+Human[instruction]: Use move_to_location_by_trajectory() to move battery to the assembly location.
+Robot[thought]: I understand that I need to use the move_to_location_by_trajectory() function to move the battery to the assembly location. This function will allow me to move the battery along a trajectory sequence of 6D poses, which can be more efficient and safe.
+Robot[question]: None.
+Robot[code]:
+# Step 1: move to the "assembly_space" to prepare for getting scene description
+move_to_location("assembly_space")
+# Step 2: get assembly_space description
+assembly_space_des=get_scene_descriptions()
+# Step 3: get the trajectory sequence that moves to the assembly position of the finger
+trajectory_seq=get_pointed_assembly_location(assembly_space_des)
+# Step 4: move to the assembly location by the trajectory sequence
+move_to_location_by_trajectory(trajectory_seq)
+# Step 5: open the gripper to release the battery
+open_gripper()
+# Step 6: move back along the trajectory sequence
+move_to_location_by_trajectory(trajectory_seq[::-1])
+
+# 8. move the stringer to the location where my finger is pointing (in gripper)
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "three stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "stringer"; speed: "0.5"]
+Human[instruction]: Please move the stringer to the location where my finger is pointing.
+Robot[thought]: I notice that I am currently holding a stringer and I am in the deliver_space. The human wants me to move the stringer to the location where his finger is pointing, which is in the assembly_space. So, I need to move to the assembly_space, get the location where the human's finger is pointing, and move the stringer to that location.
+Robot[question]: None.
+Robot[code]:
+# Step 1: move to the "assembly_space" to prepare for getting assembly_space scene description
+move_to_location("assembly_space")
+# Step 2: get assembly_space description
+assembly_space_des = get_scene_descriptions()
+# Step 3: get the location where the human's finger is pointing
+finger_point_loc = get_pointed_assembly_location(assembly_space_des)
+# Step 4: get the safe location near the pointed location, that avoiding collisions.
+safe_assembly_loc = get_safe_location("stringer", finger_point_loc)
+# Step 5: move to the safe location
+move_to_location(safe_assembly_loc)
+# Step 6: move to the location where the human's finger is pointing
+move_to_location(finger_point_loc)
+# Step 7: open the gripper to release the stringer
+open_gripper()
+# Step 8: move back to the safe location
+move_to_location(safe_assembly_loc)
+# ----------------------------------------------------------------
+Human[instruction]: Use move_to_location_by_trajectory() to move the stringer to the assembly location. it will move through some points without collision.
+Robot[thought]: I understand that I need to use the move_to_location_by_trajectory() function to move the stringer to the assembly location. This function will generate a trajectory that moves through some points without collision. 
+Robot[question]: None.
+Robot[code]:
+# Step 1: get the trajectory sequence that moves to the assembly position of the finger
+trajectory_seq = get_pointed_assembly_location(assembly_space_des)
+# Step 2: move to the assembly location by the trajectory sequence
+move_to_location_by_trajectory(trajectory_seq)
+# Step 3: open the gripper to release the stringer
+open_gripper()
+# Step 4: move back along the trajectory sequence to avoid collision
+move_to_location_by_trajectory(trajectory_seq[::-1])
+# ----------------------------------------------------------------
+Human[instruction]: Now you are right, but you should generate complete code at one time. Specifically, the variable assembly_space_des should obtained through some ways.
+Robot[thought]: I understand that I need to generate complete code at one time. I should first move to the assembly_space to get the assembly_space description, and then use the move_to_location_by_trajectory() function to move the stringer to the assembly location.
+Robot[question]: None.
+Robot[code]:
+# Step 1: move to the "assembly_space" to prepare for getting assembly_space scene description
+move_to_location("assembly_space")
+# Step 2: get assembly_space description
+assembly_space_des = get_scene_descriptions()
+# Step 3: get the trajectory sequence that moves to the assembly position of the finger
+trajectory_seq = get_pointed_assembly_location(assembly_space_des)
+# Step 4: move to the assembly location by the trajectory sequence
+move_to_location_by_trajectory(trajectory_seq)
+# Step 5: open the gripper to release the stringer
+open_gripper()
+# Step 6: move back along the trajectory sequence to avoid collision
+move_to_location_by_trajectory(trajectory_seq[::-1])
+
+# 9. move the stringer to the location where my finger is pointing (not in the gripper)
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[instruction]: Please install the stringer in the location where my finger is pointing.
+Robot[thought]: I understand that I need to install the stringer at the location pointed by the human. Since I'm currently in the deliver_space with an open gripper, I need to first move to the part_space, grasp the stringer, then move to the assembly_space, and finally install the stringer at the pointed location.
+Robot[question]: None.
+Robot[code]:
+# Step 1: move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: get part_space description
+part_space_des=get_scene_descriptions()
+# Step 3: get the storage location of stringer
+part_loc=get_storage_location(part_space_des, "stringer")
+# Step 4: get the safe location near the stringer, that avoiding collisions.
+safe_part_loc= get_safe_location("stringer", part_loc)
+# Step 5: move to the safe location
+move_to_location(safe_part_loc)
+# Step 6: open the gripper
+open_gripper()
+# Step 7: move to the location of the stringer
+move_to_location(part_loc)
+# Step 8: close the gripper to grasp the stringer
+close_gripper()
+# Step 9: move to the safe location
+move_to_location(safe_part_loc)
+# Step 10: move to the "assembly_space" to prepare for installing the stringer
+move_to_location("assembly_space")
+# Step 11: get assembly_space description
+assembly_space_des=get_scene_descriptions()
+# Step 12: get the pointed assembly location
+assembly_loc=get_pointed_assembly_location(assembly_space_des)
+# Step 13: get the safe location near the assembly location, that avoiding collisions.
+safe_assembly_loc= get_safe_location("stringer", assembly_loc)
+# Step 14: move to the safe location
+move_to_location(safe_assembly_loc)
+# Step 15: move to the assembly location
+move_to_location(assembly_loc)
+# Step 16: open the gripper to install the stringer
+open_gripper()
+# Step 17: move to the safe location
+move_to_location(safe_assembly_loc)
+# ----------------------------------------------------------------
+Human[instruction]: You should use move_to_location_by_trajectory API to move the stringer to its assembly location.
+Robot[thought]: I understand. Instead of moving directly to the assembly location, I should use the move_to_location_by_trajectory API to move the stringer along a trajectory to its assembly location. This will ensure a smoother and safer movement.
+Robot[question]: None.
+Robot[code]:
+# Step 1: move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: get part_space description
+part_space_des=get_scene_descriptions()
+# Step 3: get the storage location of stringer
+part_loc=get_storage_location(part_space_des, "stringer")
+# Step 4: get the safe location near the stringer, that avoiding collisions.
+safe_part_loc= get_safe_location("stringer", part_loc)
+# Step 5: move to the safe location
+move_to_location(safe_part_loc)
+# Step 6: open the gripper
+open_gripper()
+# Step 7: move to the location of the stringer
+move_to_location(part_loc)
+# Step 8: close the gripper to grasp the stringer
+close_gripper()
+# Step 9: move to the safe location
+move_to_location(safe_part_loc)
+# Step 10: move to the "assembly_space" to prepare for installing the stringer
+move_to_location("assembly_space")
+# Step 11: get assembly_space description
+assembly_space_des=get_scene_descriptions()
+# Step 12: get the pointed assembly location
+assembly_loc=get_pointed_assembly_location(assembly_space_des)
+# Step 13: get the safe location near the assembly location, that avoiding collisions.
+safe_assembly_loc= get_safe_location("stringer", assembly_loc)
+# Step 14: move to the safe location
+move_to_location(safe_assembly_loc)
+# Step 15: move to the assembly location by a trajectory sequence
+move_to_location_by_trajectory(assembly_loc)
+# Step 16: open the gripper to install the stringer
+open_gripper()
+# Step 17: move to the safe location
+move_to_location(safe_assembly_loc)
+
+# 10. move the battery to the location where human finger is pointing (detailed instruction)
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[instruction]: Please grasp the battery in the part space and install it in the location where my finger is pointing.Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[instruction]: Please grasp the battery in the part space and install it in the location where my finger is pointing.
+Robot[thought]: I notice the battery is in the part_space and I am in the deliver_space with gripper open. So, I need to move to the part_space; get the location of the battery; grasp the battery and avoid collisions. Then, I need to move to the assembly_space, get the location where the human finger is pointing, and install the battery.
+Robot[question]: None.
+Robot[code]:
+# Step 1: move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: get part_space description
+part_space_des=get_scene_descriptions()
+# Step 3: get the storage location of battery
+battery_loc=get_storage_location(part_space_des, "battery")
+# Step 4: get the safe location near the battery, that avoiding collisions.
+safe_battery_loc= get_safe_location("battery", battery_loc)
+# Step 5: move to the safe location
+move_to_location(safe_battery_loc)
+# Step 6: open the gripper
+open_gripper()
+# Step 7: move to the location of the battery
+move_to_location(battery_loc)
+# Step 8: close the gripper to grasp the battery
+close_gripper()
+# Step 9: move to the safe location
+move_to_location(safe_battery_loc)
+# Step 10: move to the "assembly_space" to prepare for getting assembly scene description
+move_to_location("assembly_space")
+# Step 11: get assembly_space description
+assembly_space_des=get_scene_descriptions()
+# Step 12: get the pointed assembly location
+pointed_assembly_loc=get_pointed_assembly_location(assembly_space_des)
+# Step 13: get the safe location near the pointed assembly location, that avoiding collisions.
+safe_assembly_loc= get_safe_location("assembly_space", pointed_assembly_loc)
+# Step 14: move to the safe location
+move_to_location(safe_assembly_loc)
+# Step 15: move to the pointed assembly location
+move_to_location(pointed_assembly_loc)
+# Step 16: open the gripper to install the battery
+open_gripper()
+# Step 17: move to the safe location
+move_to_location(safe_assembly_loc)
+# ------------------------------------------------
+Human[instruction]: You should another api named use move to location by trajectory to move objects to the assembly location.
+Robot[thought]: I understand. Instead of moving directly to the assembly location, I should use a trajectory to move the battery to the assembly location to avoid potential collisions.
+Robot[question]: None.
+Robot[code]:
+# Step 1: move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: get part_space description
+part_space_des=get_scene_descriptions()
+# Step 3: get the storage location of battery
+battery_loc=get_storage_location(part_space_des, "battery")
+# Step 4: get the safe location near the battery, that avoiding collisions.
+safe_battery_loc= get_safe_location("battery", battery_loc)
+# Step 5: move to the safe location
+move_to_location(safe_battery_loc)
+# Step 6: open the gripper
+open_gripper()
+# Step 7: move to the location of the battery
+move_to_location(battery_loc)
+# Step 8: close the gripper to grasp the battery
+close_gripper()
+# Step 9: move to the safe location
+move_to_location(safe_battery_loc)
+# Step 10: move to the "assembly_space" to prepare for getting assembly scene description
+move_to_location("assembly_space")
+# Step 11: get assembly_space description
+assembly_space_des=get_scene_descriptions()
+# Step 12: get the pointed assembly location by trajectory
+pointed_assembly_loc=get_pointed_assembly_location(assembly_space_des)
+# Step 13: move to the pointed assembly location by trajectory
+move_to_location_by_trajectory(pointed_assembly_loc)
+# Step 14: open the gripper to install the battery
+open_gripper()
+# Step 15: move to the safe location by trajectory
+move_to_location_by_trajectory(safe_battery_loc)
+
+# 11. move the signal interface board to the location of human finger pointing (detailed instruction)
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"; speed: "0.5"]
+Human[instruction]: Please grasp the signal interface board in the part space and install it in the location where my finger is pointing.
+Robot[thought]: I notice the signal interface board is in the part_space and I am in the deliver_space with gripper open. So, I need to move to the part_space; get the location of the signal interface board; grasp the signal interface board and avoid collisions. Then, I need to move to the assembly_space, get the location where the human finger is pointing, and install the signal interface board there.
+Robot[question]: None.
+Robot[code]:
+# Step 1: move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: get part_space description
+part_space_des=get_scene_descriptions()
+# Step 3: get the storage location of signal interface board
+part_loc=get_storage_location(part_space_des, "signal interface board")
+# Step 4: get the safe location near the signal interface board, that avoiding collisions.
+safe_part_loc= get_safe_location("signal interface board", part_loc)
+# Step 5: move to the safe location
+move_to_location(safe_part_loc)
+# Step 6: open the gripper
+open_gripper()
+# Step 7: move to the location of the signal interface board
+move_to_location(part_loc)
+# Step 8: close the gripper to grasp the signal interface board
+close_gripper()
+# Step 9: move to the safe location
+move_to_location(safe_part_loc)
+# Step 10: move to the "assembly_space" to prepare for getting assembly scene description
+move_to_location("assembly_space")
+# Step 11: get assembly_space description
+assembly_space_des=get_scene_descriptions()
+# Step 12: get the pointed assembly location
+assembly_loc=get_pointed_assembly_location(assembly_space_des)
+# Step 13: get the safe location near the assembly location, that avoiding collisions.
+safe_assembly_loc= get_safe_location("assembly_location", assembly_loc)
+# Step 14: move to the safe location
+move_to_location(safe_assembly_loc)
+# Step 15: move to the assembly location
+move_to_location(assembly_loc)
+# Step 16: open the gripper to install the signal interface board
+open_gripper()
+# Step 17: move to the safe location
+move_to_location(safe_assembly_loc)
+# ------------------------------------------------------------
+Human[instruction]: Use move_to_location_by_trajectory() to move the signal interface board to the assembly location. it will move through some points without collision.
+Robot[thought]: I understand that I need to use the move_to_location_by_trajectory() function to move the signal interface board to the assembly location. This function will generate a trajectory sequence of 6D poses that moves to the assembly position of the finger, avoiding any collisions.
+Robot[question]: None.
+Robot[code]:
+# Step 1: get the pointed assembly location trajectory sequence
+assembly_loc_seq=get_pointed_assembly_location(assembly_space_des)
+# Step 2: move to the assembly location by the trajectory sequence
+move_to_location_by_trajectory(assembly_loc_seq)
+# Step 3: open the gripper to install the signal interface board
+open_gripper()
+# Step 4: move back along the trajectory sequence
+move_to_location_by_trajectory(assembly_loc_seq[::-1])
+# ----------------------------------------------------------------
+Human[instruction]: Now you are right. But you should generate all code at one time!
+Robot[thought]: I understand that I need to generate all the code at once. I will grasp the signal interface board from the part_space, then move it to the assembly location pointed by the human finger using a trajectory sequence to avoid collisions, and finally install it.
+Robot[question]: None.
+Robot[code]:
+# Step 1: move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: get part_space description
+part_space_des=get_scene_descriptions()
+# Step 3: get the storage location of signal interface board
+part_loc=get_storage_location(part_space_des, "signal interface board")
+# Step 4: get the safe location near the signal interface board, that avoiding collisions.
+safe_part_loc= get_safe_location("signal interface board", part_loc)
+# Step 5: move to the safe location
+move_to_location(safe_part_loc)
+# Step 6: open the gripper
+open_gripper()
+# Step 7: move to the location of the signal interface board
+move_to_location(part_loc)
+# Step 8: close the gripper to grasp the signal interface board
+close_gripper()
+# Step 9: move to the safe location
+move_to_location(safe_part_loc)
+# Step 10: move to the "assembly_space" to prepare for getting assembly scene description
+move_to_location("assembly_space")
+# Step 11: get assembly_space description
+assembly_space_des=get_scene_descriptions()
+# Step 12: get the pointed assembly location trajectory sequence
+assembly_loc_seq=get_pointed_assembly_location(assembly_space_des)
+# Step 13: move to the assembly location by the trajectory sequence
+move_to_location_by_trajectory(assembly_loc_seq)
+# Step 14: open the gripper to install the signal interface board
+open_gripper()
+# Step 15: move back along the trajectory sequence
+move_to_location_by_trajectory(assembly_loc_seq[::-1])
+
+# 12. move the stringer to the location of human finger pointing (detailed instruction)
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[instruction]: Please first get the assembly location where my finger is pointing and then move the stringer to that location.
+Robot[thought]: I understand that I need to move the stringer to the location where the human's finger is pointing. First, I need to get the assembly location where the human's finger is pointing. Then, I need to grasp the stringer from the part_space and move it to the assembly location. 
+Robot[question]: None.
+Robot[code]:
+# Step 1: Get the assembly location where the human's finger is pointing
+assembly_space_des = get_scene_descriptions()
+pointed_assembly_loc = get_pointed_assembly_location(assembly_space_des)
+# Step 2: Move to the part_space to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 3: Get part_space description
+part_space_des = get_scene_descriptions()
+# Step 4: Get the storage location of stringer
+part_loc = get_storage_location(part_space_des, "stringer")
+# Step 5: Get the safe location near the stringer, that avoiding collisions.
+safe_part_loc = get_safe_location("stringer", part_loc)
+# Step 6: Move to the safe location
+move_to_location(safe_part_loc)
+# Step 7: Open the gripper
+open_gripper()
+# Step 8: Move to the location of the stringer
+move_to_location(part_loc)
+# Step 9: Close the gripper to grasp the stringer
+close_gripper()
+# Step 10: Move to the safe location
+move_to_location(safe_part_loc)
+# Step 11: Move to the assembly location where the human's finger is pointing
+move_to_location(pointed_assembly_loc)
+# ----------------------------------------------------------------
+Human[instruction]: You should another api named use move to location by trajectory to move objects to the assembly location.
+Robot[thought]: I understand. I need to use the move_to_location_by_trajectory API to move the stringer to the assembly location. This will allow me to follow a specific path, which can be safer and more efficient.
+Robot[question]: None.
+Robot[code]:
+# Step 1: Get the assembly location where the human's finger is pointing
+assembly_space_des = get_scene_descriptions()
+pointed_assembly_loc = get_pointed_assembly_location(assembly_space_des)
+# Step 2: Move to the part_space to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 3: Get part_space description
+part_space_des = get_scene_descriptions()
+# Step 4: Get the storage location of stringer
+part_loc = get_storage_location(part_space_des, "stringer")
+# Step 5: Get the safe location near the stringer, that avoiding collisions.
+safe_part_loc = get_safe_location("stringer", part_loc)
+# Step 6: Move to the safe location
+move_to_location(safe_part_loc)
+# Step 7: Open the gripper
+open_gripper()
+# Step 8: Move to the location of the stringer
+move_to_location(part_loc)
+# Step 9: Close the gripper to grasp the stringer
+close_gripper()
+# Step 10: Move to the safe location
+move_to_location(safe_part_loc)
+# Step 11: Move to the assembly location where the human's finger is pointing by following a trajectory
+move_to_location_by_trajectory(pointed_assembly_loc)
+
+# 13. move the stringer to the location of human finger pointing (in gripper, need adjusting speed)
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "three stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "stringer"]
+Human[instruction]: Please move the stringer to the location where my finger is pointing, use a lower speed when grasping or installing parts.
+Robot[thought]: I notice that I am currently holding a stringer and my location is in the deliver_space. The human wants me to move the stringer to the location where his finger is pointing. I need to lower my speed when grasping or installing parts. So, I need to set a lower speed; move to the assembly_space; get the location where the human's finger is pointing; move the stringer to that location and avoid collisions.
+Robot[question]: None.
+Robot[code]:
+# Step 1: set a lower speed
+set_speed("low")
+# Step 2: move to the "assembly_space" to prepare for getting assembly_space's scene description
+move_to_location("assembly_space")
+# Step 3: get assembly_space description
+assembly_space_des=get_scene_descriptions()
+# Step 4: get the location where the human's finger is pointing
+finger_point_loc=get_pointed_assembly_location(assembly_space_des)
+# Step 5: get the safe location near the finger point location, that avoiding collisions.
+safe_finger_point_loc= get_safe_location("stringer", finger_point_loc)
+# Step 6: move to the safe location
+move_to_location(safe_finger_point_loc)
+# Step 7: move to the location where the human's finger is pointing
+move_to_location(finger_point_loc)
+# Step 8: open the gripper to release the stringer
+open_gripper()
+# Step 9: move to the safe location
+move_to_location(safe_finger_point_loc)
+# ------------------------------------------------------------
+Human[instruction]: You should another api named use move to location by trajectory to move objects to the assembly location. And set low speed as 25 percent.
+Robot[thought]: I understand that I need to use the move_to_location_by_trajectory API to move the stringer to the assembly location. I also need to set the speed to 25 percent when moving the stringer.
+Robot[question]: None.
+Robot[code]:
+# Step 1: set speed to 25 percent
+set_speed(0.25)
+# Step 2: move to the "assembly_space" to prepare for getting assembly_space's scene description
+move_to_location("assembly_space")
+# Step 3: get assembly_space description
+assembly_space_des=get_scene_descriptions()
+# Step 4: get the trajectory sequence that moves to the assembly position of the finger
+finger_point_traj=get_pointed_assembly_location(assembly_space_des)
+# Step 5: move to the location where the human's finger is pointing by the trajectory sequence
+move_to_location_by_trajectory(finger_point_traj)
+# Step 6: open the gripper to release the stringer
+open_gripper()
+# Step 7: move to the initial location by the reverse trajectory sequence
+move_to_location_by_trajectory(finger_point_traj[::-1])
+
+# 15. move the stringer to human finger pointed location (in gripper, need adjusting speed, not clearly appoint)
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "three stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "close"; grasped: "stringer"; speed: "0.5"]
+Human[instruction]: Please move the stringer to the location where my finger is pointing and adjust the speed adaptively.
+Robot[thought]: I notice that I am currently holding a stringer and I am in the deliver_space. I need to move to the assembly_space, get the location where the human finger is pointing, and move the stringer to that location. I also need to adjust the speed adaptively during this process.
+Robot[question]: None.
+Robot[code]:
+# Step 1: move to the "assembly_space" to prepare for getting assembly_space's scene description
+move_to_location("assembly_space")
+# Step 2: get assembly_space description
+assembly_space_des = get_scene_descriptions()
+# Step 3: get the assembly location of the finger
+finger_assembly_loc = get_pointed_assembly_location(assembly_space_des)
+# Step 4: set the speed adaptively
+set_speed("adaptive")
+# Step 5: move to the location of the finger by trajectory
+move_to_location_by_trajectory(finger_assembly_loc)
+# --------------------------------
+Human[instruction]: There is a little mistake. Please use a specific value range from 0 to 1 as "adaptive" speed.
+Robot[thought]: I understand that I need to set a specific speed value within the range of 0 to 1 instead of using the term "adaptive". I will set the speed to 0.7, which is a moderate speed that should allow for precise movement without being too slow.
+Robot[question]: None.
+Robot[code]:
+Step 1: set the speed to 0.7
+set_speed(0.7)
+Step 2: move to the location of the finger by trajectory
+move_to_location_by_trajectory(finger_assembly_loc)
+
+# 16. move the stringer to human finger pointed location (not in gripper, need adjusting speed, not clearly appoint)
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[instruction]: Please install the stringer in the location where my finger is pointing and adjust the speed adaptively.
+Space[observation]: [tool_space: ["one phillips screwdriver", "one slotted screwdriver", "one hex screwdriver"]; part_space: ["one battery", "four stringers", "one signal interface board"]; assembly_space: ["framework"]]
+Robot[sensor]: [location: "deliver_space"; gripper: "open"; grasped: "None"]
+Human[instruction]: Please install the stringer in the location where my finger is pointing and adjust the speed adaptively.
+Robot[thought]: I understand that I need to pick up the stringer from the part_space, move it to the location where the human finger is pointing in the assembly_space, and adjust the speed adaptively. I am currently in the deliver_space with my gripper open.
+Robot[question]: None.
+Robot[code]:
+# Step 1: move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: get part_space description
+part_space_des=get_scene_descriptions()
+# Step 3: get the storage location of stringer
+part_loc=get_storage_location(part_space_des, "stringer")
+# Step 4: get the safe location near the stringer, that avoiding collisions.
+safe_part_loc= get_safe_location("stringer", part_loc)
+# Step 5: move to the safe location
+move_to_location(safe_part_loc)
+# Step 6: open the gripper
+open_gripper()
+# Step 7: move to the location of the stringer
+move_to_location(part_loc)
+# Step 8: close the gripper to grasp the stringer
+close_gripper()
+# Step 9: move to the safe location
+move_to_location(safe_part_loc)
+# Step 10: move to the "assembly_space" to prepare for getting assembly scene description
+move_to_location("assembly_space")
+# Step 11: get assembly_space description
+assembly_space_des=get_scene_descriptions()
+# Step 12: get the assembly location of the finger
+assembly_loc=get_pointed_assembly_location(assembly_space_des)
+# Step 13: get the safe location near the assembly location, that avoiding collisions.
+safe_assembly_loc= get_safe_location("stringer", assembly_loc)
+# Step 14: move to the safe location
+move_to_location(safe_assembly_loc)
+# Step 15: adjust the speed adaptively
+set_speed("adaptive")
+# Step 16: move to the assembly location of the finger
+move_to_location(assembly_loc)
+# Step 17: open the gripper to install the stringer
+open_gripper()
+# Step 18: move to the safe location
+move_to_location(safe_assembly_loc)
+# ------------------------------------------------------------
+Human[instruction]: You should another api named use move to location by trajectory to move objects to the assembly location. And set low speed as 25 percent.
+Robot[thought]: I understand that I need to use the move_to_location_by_trajectory API to move the stringer to the assembly location. I also need to set the speed to 25 percent.
+Robot[question]: None.
+Robot[code]:
+# Step 1: move to the "part_space" to prepare for getting parts' scene description
+move_to_location("part_space")
+# Step 2: get part_space description
+part_space_des=get_scene_descriptions()
+# Step 3: get the storage location of stringer
+part_loc=get_storage_location(part_space_des, "stringer")
+# Step 4: get the safe location near the stringer, that avoiding collisions.
+safe_part_loc= get_safe_location("stringer", part_loc)
+# Step 5: move to the safe location
+move_to_location(safe_part_loc)
+# Step 6: open the gripper
+open_gripper()
+# Step 7: move to the location of the stringer
+move_to_location(part_loc)
+# Step 8: close the gripper to grasp the stringer
+close_gripper()
+# Step 9: move to the safe location
+move_to_location(safe_part_loc)
+# Step 10: move to the "assembly_space" to prepare for getting assembly scene description
+move_to_location("assembly_space")
+# Step 11: get assembly_space description
+assembly_space_des=get_scene_descriptions()
+# Step 12: get the assembly location of the finger
+assembly_loc=get_pointed_assembly_location(assembly_space_des)
+# Step 13: get the safe location near the assembly location, that avoiding collisions.
+safe_assembly_loc= get_safe_location("stringer", assembly_loc)
+# Step 14: move to the safe location
+move_to_location(safe_assembly_loc)
+# Step 15: set the speed to 25 percent
+set_speed(0.25)
+# Step 16: move to the assembly location of the finger by trajectory
+move_to_location_by_trajectory(assembly_loc)
+# Step 17: open the gripper to install the stringer
+open_gripper()
+# Step 18: move to the safe location
+move_to_location(safe_assembly_loc)
