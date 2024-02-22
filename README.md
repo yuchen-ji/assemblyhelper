@@ -2,5 +2,5 @@
 
 ## Human-Robot Assembly Framework
 <div align=center>
-    <img src="https://github.com/yuchen-ji/assemblyhelper/blob/main/assets/figures/overview.svg?sanitize=true">
+    <img src="https://github.com/yuchen-ji/assemblyhelper/blob/main/assets/figures/overview.svg?sanitize=true" width="800px">
 </div>
