@@ -14,6 +14,7 @@ The architecture of the AssemblyHelper includes a perception module, a reasoning
 
 
 ## Case study
+### Experiment setup
 ![](/assets/figures/case_all.svg#pic_center)
 
 
