@@ -2,45 +2,36 @@
 
 ## Human-Robot Assembly Framework
 ### Overview
-![](/assets/figures/overview.svg)
-<!-- <div align=center>
-    <img src="https://github.com/yuchen-ji/assemblyhelper/blob/main/assets/figures/overview.svg?sanitize=true" width="600px">
-</div> -->
+![](/assets/figures/overview.svg#pic_center)
 
 ### System implement
-<div align=center>
-    <img src="https://github.com/yuchen-ji/assemblyhelper/blob/main/assets/figures/system.svg?sanitize=true" width="800px">
-</div>
+![](/assets/figures/system.svg#pic_center)
+
 
 ## Case study
-<div align=center>
-    <img src="https://github.com/yuchen-ji/assemblyhelper/blob/main/assets/figures/case_all.svg?sanitize=true" width="800px">
-</div>
+![](/assets/figures/case_all.svg#pic_center)
+
 
 ### Assembly location recognition
-<div align=center>
-    <img src="https://github.com/yuchen-ji/assemblyhelper/blob/main/assets/figures/case_pointed.svg?sanitize=true" width="800px">
-</div>
+![](/assets/figures/case_pointed.svg#pic_center)
+
 
 ### HRC code reasoning
-<div align=center>
-    <img src="https://github.com/yuchen-ji/assemblyhelper/blob/main/assets/figures/case_llm_all.svg?sanitize=true" width="800px">
-</div>
+![](/assets/figures/case_llm_all.svg#pic_center)
+
 
 ### Robot visual grasping
-<div align=center>
-    <img src="https://github.com/yuchen-ji/assemblyhelper/blob/main/assets/figures/case_grasp_parts.svg?sanitize=true" width="800px">
-</div>
+![](/assets/figures/case_grasp_parts.svg#pic_center)
+
 
 ### procedure of HRC assembly
-<div align=center>
-    <img src="https://github.com/yuchen-ji/assemblyhelper/blob/main/assets/figures/case_stringer1.svg?sanitize=true" width="800px">
-</div>
+![](/assets/figures/case_stringer1.svg#pic_center)
+
 
 ## Experiments
 ### Task reasoning
 **Datasets:** The HRC task reasoning datasets include
-26 simple tasks, 24 medium tasks, and 16 difficult tasks. See xxx for more details.
+26 simple tasks, 24 medium tasks, and 16 difficult tasks. See [here](experiments\llms\datasets) for more details.
 
 **Results:** Please see **** for details results
 
