@@ -31,7 +31,7 @@
 ## Experiments
 ### Task reasoning
 **Datasets:** The HRC task reasoning datasets include
-26 simple tasks, 24 medium tasks, and 16 difficult tasks. See [here](experiments\llms\datasets) for more details.
+26 simple tasks, 24 medium tasks, and 16 difficult tasks. See [here](/experiments/llms/datasets) for more details.
 
 **Results:** Please see **** for details results
 
